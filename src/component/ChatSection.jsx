@@ -28,7 +28,7 @@ const ChatSection = ({ currentUser, roomid }) => {
     }
 
     return (
-        <div className="flex flex-col h-full max-h-[90vh] bg-base-100 rounded-lg border p-2">
+        <div className="flex flex-col h-[100vh] bg-base-100 rounded-lg p-2 mr-4 w-md">
             {/* Chat messages area */}
             <div
                 className="flex-1 overflow-y-auto p-4 bg-base-200 rounded-lg"

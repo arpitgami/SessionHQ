@@ -21,9 +21,11 @@ app.prepare().then(() => {
     io.on("connection", (socket) => {
         console.log("new user joined");
 
-        socket.on("join-room", (roomid) => {
+        socket.on("join-room", (roomid, peerid) => {
             socket.join(roomid);
+            socket.peerId = peerid;
             console.log("user joined a room", roomid);
+            socket.to(roomid).emit("new-user-joined", peerid)
         })
         socket.on("send-message", ({ user, message, roomid }) => {
             io.to(roomid).emit("message-received", {
@@ -31,6 +33,16 @@ app.prepare().then(() => {
                 message: message
             });
         })
+
+        socket.on('disconnect', () => {
+            const roomId = [...socket.rooms][1];
+
+            const peerId = socket.peerId;
+
+            socket.to(roomId).emit('user-left', peerId);
+
+        });
+
     });
 
     httpServer

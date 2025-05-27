@@ -21,6 +21,7 @@ export const SocketProvider = ({ children }) => {
 
         const socketInstance = io();
         setSocket(socketInstance);
+        console.log("socket initated..");
 
         socketInstance.on("message-received", ({ user, message }) => {
 
