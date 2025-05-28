@@ -73,7 +73,7 @@ const page = () => {
 
 
     return (
-        <div className="flex flex-row">
+        <div className="flex h-screen items-center justify-evenly ">
             <StreamPlayer className="h-max" stream={stream} muted={true} userID={peerid} playing={true} />
             {incomingStream && <StreamPlayer stream={incomingStream} muted={true} userID={incomingID} playing={true} />}
             <ChatSection currentUser="arpit" roomid={roomid} />

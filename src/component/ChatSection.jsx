@@ -28,10 +28,10 @@ const ChatSection = ({ currentUser, roomid }) => {
     }
 
     return (
-        <div className="flex flex-col h-[100vh] bg-base-100 rounded-lg p-2 mr-4 w-md">
+        <div className="flex flex-col h-[90vh] bg-base-100 border drop-shadow-xl rounded-lg p-2 mx-4 w-md">
             {/* Chat messages area */}
             <div
-                className="flex-1 overflow-y-auto p-4 bg-base-200 rounded-lg"
+                className="flex-1 overflow-y-auto p-4 bg-base-100 rounded-lg"
                 ref={chatRef}
             >
                 {messages.map((msg, index) => (
@@ -50,9 +50,9 @@ const ChatSection = ({ currentUser, roomid }) => {
                     value={text}
                     onChange={(e) => setText(e.target.value)}
                     placeholder="Type a message..."
-                    className="input input-bordered flex-1"
+                    className="input flex-1"
                 />
-                <button onClick={handleSend} className="btn btn-primary">
+                <button onClick={handleSend} className="btn btn-neutral">
                     Send
                 </button>
             </div>

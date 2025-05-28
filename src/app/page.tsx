@@ -11,6 +11,9 @@ export default function Home() {
   }, [socket])
 
   return (
-    <>yoo</>
+    <>yoo
+
+      <button className="btn-base-100">Responsive</button>
+    </>
   );
 }
