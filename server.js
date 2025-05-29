@@ -23,6 +23,7 @@ app.prepare().then(() => {
 
         socket.on("join-room", (roomid, peerid) => {
             socket.join(roomid);
+            socket.roomsID = roomid;
             socket.peerId = peerid;
             console.log("user joined a room", roomid);
             socket.to(roomid).emit("new-user-joined", peerid)
@@ -35,13 +36,18 @@ app.prepare().then(() => {
         })
 
         socket.on('disconnect', () => {
-            const roomId = [...socket.rooms][1];
-
+            const roomId = socket.roomsID;
             const peerId = socket.peerId;
+            console.log("user left", roomId, peerId)
 
             socket.to(roomId).emit('user-left', peerId);
 
         });
+
+        socket.on("screen-sharing-status", (roomid, status) => {
+            socket.to(roomid).emit("user-sharing-screen-status", status);
+
+        })
 
     });
 

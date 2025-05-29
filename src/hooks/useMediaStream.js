@@ -13,7 +13,7 @@ const useMediaStream = () => {
                 const mystream = await navigator.mediaDevices.getUserMedia({
                     audio: true, video: true
                 })
-                console.log("setting mystream...");
+                console.log("setting mystream...", mystream);
                 setStream(mystream);
 
             } catch (error) {
@@ -23,7 +23,7 @@ const useMediaStream = () => {
 
     }, [])
 
-    return { stream };
+    return { stream, setStream };
 }
 
 export default useMediaStream;

@@ -28,7 +28,7 @@ const ChatSection = ({ currentUser, roomid }) => {
     }
 
     return (
-        <div className="flex flex-col h-[90vh] bg-base-100 border drop-shadow-xl rounded-lg p-2 mx-4 w-md">
+        <div className="flex flex-col h-[90vh] bg-base-100 border drop-shadow-xl rounded-lg p-2 mx-4 w-[25vw]">
             {/* Chat messages area */}
             <div
                 className="flex-1 overflow-y-auto p-4 bg-base-100 rounded-lg"
@@ -51,6 +51,11 @@ const ChatSection = ({ currentUser, roomid }) => {
                     onChange={(e) => setText(e.target.value)}
                     placeholder="Type a message..."
                     className="input flex-1"
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                            handleSend();
+                        }
+                    }}
                 />
                 <button onClick={handleSend} className="btn btn-neutral">
                     Send
