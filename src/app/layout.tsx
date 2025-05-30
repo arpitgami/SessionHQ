@@ -1,13 +1,6 @@
-"use client"
+"use client";
 import type { Metadata } from "next";
-import {
-  ClerkProvider,
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
+import { ClerkProvider } from "@clerk/nextjs";
 import { Navigation } from "@/component/Navbar";
 import "./globals.css";
 import { usePathname } from "next/navigation";
@@ -18,16 +11,15 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   const pathname = usePathname();
-  const hideNavbarRoutes = ["/login", "/signup"];
+  const hideNavbarRoutes = ["/login", "/signup", "/experts/calendar"];
 
-  const shouldHideNavbar = hideNavbarRoutes.includes(pathname) || pathname.startsWith("/room/");
+  const shouldHideNavbar =
+    hideNavbarRoutes.includes(pathname) || pathname.startsWith("/room/");
 
   useEffect(() => {
-
     console.log("pathname : ", pathname, shouldHideNavbar);
-  }, [])
+  }, []);
 
   return (
     <ClerkProvider>
