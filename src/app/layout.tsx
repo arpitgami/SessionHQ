@@ -26,12 +26,12 @@ export default function RootLayout({
 
   useEffect(() => {
 
-    console.log("pathname : ", pathname, shouldHideNavbar);
+    // console.log("pathname : ", pathname, shouldHideNavbar);
   }, [])
 
   return (
     <ClerkProvider>
-      <html data-theme="fantasy" lang="en">
+      <html data-theme="lofi" lang="en">
         <body>
           {!shouldHideNavbar && <Navigation />}
           {children}

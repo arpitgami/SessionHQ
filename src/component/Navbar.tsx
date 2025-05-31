@@ -10,12 +10,12 @@ import { usePathname } from "next/navigation";
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/explore", label: "Explore" },
-  { href: "/becomeexp", label: "Become An Expert" },
+  { href: "/become_an_expert", label: "Become An Expert" },
   { href: "/prstruct", label: "Project Structure" },
 ];
 export const Navigation = () => {
   const pathname = usePathname();
-  console.log(pathname);
+  // console.log(pathname);
   return (
     <nav className="bg-neutral border-b shadow-sm px-6 py-4">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -33,11 +33,10 @@ export const Navigation = () => {
               <li key={href}>
                 <Link
                   href={href}
-                  className={`text-sm font-medium text-white pb-1  border-b-2 transition-all duration-200 transform hover:scale-110 ${
-                    isActive
-                      ? "border-white scale-105"
-                      : "border-transparent hover:scale-125"
-                  }`}
+                  className={`text-sm font-medium text-white pb-1  border-b-2 transition-all duration-200 transform hover:scale-110 ${isActive
+                    ? "border-white scale-105"
+                    : "border-transparent hover:scale-125"
+                    }`}
                 >
                   {" "}
                   {label}{" "}
