@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Step1 from "@/component/expertform/step1";
 import Step2 from "@/component/expertform/step2";
 import Step3 from "@/component/expertform/step3";
+import uploadImage from "@/hooks/uploadImage";
 import { useRouter } from 'next/navigation';
 
 export default function ExpertApplicationForm() {
@@ -15,11 +16,12 @@ export default function ExpertApplicationForm() {
     const prevStep = () => setStep((s) => Math.max(s - 1, 1));
 
     const [formData, setFormData] = useState({});
+    const [expertImage, setExpertImage] = useState(null);
     const [loadFrom, setLoadForm] = useState(false);
 
-    useEffect(() => {
-        console.log(" data:", loadFrom);
-    }, [loadFrom]);
+    // useEffect(() => {
+    //     console.log(process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY)
+    // }, []);
 
     const updateField = (key, value) => {
         setFormData(prev => ({ ...prev, [key]: value }));
@@ -43,9 +45,23 @@ export default function ExpertApplicationForm() {
             alert("Passwords do not match.");
             return;
         }
+        if (!expertImage) {
+            alert("Upload image.");
+            return;
+        }
 
         // ✅ If everything is valid
         console.log("Submitting:", formData);
+
+
+        //uploading image to cloudinary
+        if (!formData.imageURL) {
+
+            console.log("expert image before calling uplaodimage", expertImage);
+            const { imageURL, public_id } = await uploadImage(expertImage, process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY);
+            updateField("imageURL", imageURL);
+            updateField("publicID", public_id);
+        }
 
         try {
             const res = await fetch("/api/expert/saveexpertdata", {
@@ -87,7 +103,7 @@ export default function ExpertApplicationForm() {
                 {/* Form */}
                 {step === 1 && <Step1 formData={formData} updateField={updateField} />}
 
-                {step === 2 && <Step2 formData={formData} updateField={updateField} />}
+                {step === 2 && <Step2 formData={formData} updateField={updateField} setExpertImage={setExpertImage} expertImage={expertImage} />}
 
                 {step === 3 && <Step3 formData={formData} updateField={updateField} />}
 

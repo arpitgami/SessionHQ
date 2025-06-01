@@ -7,13 +7,13 @@ import { clerkClient } from "@clerk/nextjs/server";
 export async function POST(req: NextRequest) {
     try {
 
-        console.log("route was hit...");
+        // console.log("route was hit...");
         await connect();
 
         const body = await req.json();
-        console.log("body : ", body);
+        // console.log("body : ", body);
         const { email, password } = body;
-        console.log(email, password);
+        // console.log(email, password);
         const client = await clerkClient();
         const user = await client.users.createUser(
             {
@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
         );
 
         const clerkID = user.id;
-        console.log("clerkid", clerkID);
+        // console.log("clerkid", clerkID);
         delete body.password;
         delete body.confirmPassword;
         body.clerkID = clerkID;

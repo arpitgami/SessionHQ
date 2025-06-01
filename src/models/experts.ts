@@ -8,6 +8,8 @@ const SocialProofSchema = new mongoose.Schema({
 const ExpertApplicationSchema = new mongoose.Schema(
     {
         clerkID: { type: String, required: true, unique: true },
+        imageURL: { type: String, required: true },
+        publicID: { type: String, required: true },
         fullName: { type: String, required: true },
         email: { type: String, required: true, unique: true },
         linkedin: { type: String, required: true },

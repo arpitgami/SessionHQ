@@ -1,9 +1,22 @@
 'use client';
 import { FormField, MultiSelect } from './forminputs';
 
-export default function Step2({ formData, updateField }) {
+export default function Step2({ formData, updateField, setExpertImage, expertImage }) {
     return (
         <div className="space-y-4">
+
+            <FormField label="Upload Profile Photo" required={false}>
+                <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setExpertImage(e.target.files?.[0])}
+                    className="file-input file-input-bordered w-full"
+                />
+            </FormField>
+
+            {expertImage && <p className="text-sm mt-2 text-gray-600">
+                Selected: <strong>{expertImage.name}</strong>
+            </p>}
 
             <FormField label="Short Bio" required>
                 <textarea

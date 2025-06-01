@@ -6,10 +6,9 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 
 const navLinks = [
-  { href: "/", label: "Home" },
   { href: "/explore", label: "Explore" },
+  { href: "/meetings", label: "Meetings" },
   { href: "/become_an_expert", label: "Become An Expert" },
-  { href: "/prstruct", label: "Project Structure" },
 ];
 
 export const Navigation = () => {
@@ -34,8 +33,8 @@ export const Navigation = () => {
                 <Link
                   href={href}
                   className={`text-sm font-medium text-white pb-1 border-b-2 transition-all duration-200 transform hover:scale-110 ${isActive
-                      ? "border-white scale-105"
-                      : "border-transparent hover:scale-125"
+                    ? "border-white scale-105"
+                    : "border-transparent hover:scale-125"
                     }`}
                 >
                   {label}
@@ -47,8 +46,10 @@ export const Navigation = () => {
 
         {/* Right Side: Auth / User */}
         <div className="hidden md:flex items-center gap-3 text-white font-medium">
-          <SignedOut>
-            <SignUpButton />
+          <SignedOut >
+            <div className="cursor-pointer">
+              <SignUpButton />
+            </div>
           </SignedOut>
           <SignedIn>
             <UserButton />
