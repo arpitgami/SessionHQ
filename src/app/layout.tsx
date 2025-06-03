@@ -23,7 +23,7 @@ export default function RootLayout({
   }, [])
 
   return (
-    <ClerkProvider>
+    <ClerkProvider >
       <html data-theme="lofi" lang="en">
         <body>
           {!shouldHideNavbar && <Navigation />}
