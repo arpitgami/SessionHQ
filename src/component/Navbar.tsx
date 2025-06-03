@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { SignUpButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { SignIn, SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
@@ -46,10 +46,13 @@ export const Navigation = () => {
 
         {/* Right Side: Auth / User */}
         <div className="hidden md:flex items-center gap-3 text-white font-medium">
-          <SignedOut >
-            <div className="cursor-pointer">
-              <SignUpButton />
-            </div>
+          <SignedOut>
+            <SignInButton mode="modal" forceRedirectUrl="/">
+              <button className="px-3 py-1 rounded">Sign In</button>
+            </SignInButton>
+            <SignUpButton mode="modal" forceRedirectUrl="/">
+              <button className="px-3 py-1 rounded">Sign Up</button>
+            </SignUpButton>
           </SignedOut>
           <SignedIn>
             <UserButton />
