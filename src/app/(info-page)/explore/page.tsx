@@ -41,7 +41,7 @@ export default function ExplorePage() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {experts.map((expert: any) => (
-            <ExpertCard key={expert._id} expert={expert} />
+            <ExpertCard key={expert.clerkID} expert={expert} />
           ))}
         </div>
       )}

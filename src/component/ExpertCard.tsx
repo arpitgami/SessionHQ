@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 interface Expert {
-  _id: string;
+  clerkID: string;
   fullName: string;
   Headline: string;
   bio: string;
@@ -60,7 +60,7 @@ export const ExpertCard = ({ expert }: { expert: Expert }) => {
 
       {/* View Profile Button */}
       <Link
-        href={`/expert/${expert._id}`}
+        href={`/expert/${expert.clerkID}`}
         className="mt-4 inline-block w-full text-center bg-black text-white py-2 text-sm rounded-lg hover:bg-black transition"
       >
         View Profile

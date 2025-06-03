@@ -40,7 +40,7 @@ export async function GET(req: NextRequest) {
   try {
     await connect();
     const experts = await ExpertApplication.find({ status: "pending" }).select(
-      "-clerkID -__v -createdAt -updatedAt"
+      "-_id -__v -createdAt -updatedAt"
     );
     console.log(experts);
     return NextResponse.json({ success: true, data: experts });
