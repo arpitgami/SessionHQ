@@ -23,7 +23,7 @@ export const ExpertCard = ({ expert }: { expert: Expert }) => {
           alt={expert.fullName}
           width={56}
           height={56}
-          className="rounded-full object-cover"
+          className="rounded-full aspect-square object-cover"
         />
         <div className="flex-1">
           <h2 className="text-lg font-semibold text-gray-900">

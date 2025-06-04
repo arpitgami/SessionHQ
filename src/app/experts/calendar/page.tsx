@@ -109,17 +109,16 @@ export default function ExpertAvailabilityCalendar({
                     return (
                       <td
                         key={dateStr + hour}
-                        className={`border border-gray-300 text-center py-2 ${
-                          isPast
-                            ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                            : wasSavedButRemoved
+                        className={`border border-gray-300 text-center py-2 ${isPast
+                          ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                          : wasSavedButRemoved
                             ? "bg-red-200 text-red-700 cursor-pointer" // ❌ Removed after being saved
                             : isUnchangedSaved
-                            ? "bg-green-500 text-white cursor-pointer" // ✅ Still saved and selected
-                            : isNewlySelected
-                            ? "bg-blue-500 text-white cursor-pointer" // 🔵 New selection
-                            : "bg-white hover:bg-blue-100 cursor-pointer" // ⚪ Default
-                        }`}
+                              ? "bg-green-500 text-white cursor-pointer" // ✅ Still saved and selected
+                              : isNewlySelected
+                                ? "bg-blue-500 text-white cursor-pointer" // 🔵 New selection
+                                : "bg-white hover:bg-blue-100 cursor-pointer" // ⚪ Default
+                          }`}
                         onClick={() => {
                           if (!isPast) toggleSlot(dateStr, hour);
                         }}
