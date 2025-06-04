@@ -39,16 +39,26 @@ export async function POST(req: NextRequest) {
 export async function GET(req: NextRequest) {
   try {
     await connect();
-    const experts = await ExpertApplication.find({ status: "pending" }).select(
-      "-_id -__v -createdAt -updatedAt"
-    );
-    console.log(experts);
-    return NextResponse.json({ success: true, data: experts });
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get('id');
+
+    if (!id) {
+      const experts = await ExpertApplication.find({ status: "pending" }).select(
+        "-_id -__v -createdAt -updatedAt"
+      );
+      console.log(experts);
+      return NextResponse.json({ status: true, data: experts });
+    }
+    console.log("id:", id);
+
+    const expert = await ExpertApplication.find({ clerkID: id });
+    return NextResponse.json({ status: true, data: expert });
+
+
   } catch (error) {
     console.error("GET /api/experts error:", error);
     return NextResponse.json(
-      { success: false, message: "Failed to fetch experts" },
-      { status: 500 }
+      { status: false, error: error }
     );
   }
 }

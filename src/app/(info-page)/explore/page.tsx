@@ -13,10 +13,10 @@ export default function ExplorePage() {
         const res = await fetch("/api/expert/expertdata");
         const data = await res.json();
         console.log(data);
-        if (data.success) {
+        if (data.status) {
           setExperts(data.data);
         } else {
-          console.error("Failed to fetch experts:", data.message);
+          console.error("Failed to fetch experts:", data.error);
         }
       } catch (error) {
         console.error("Error fetching experts:", error);
