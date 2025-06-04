@@ -93,7 +93,9 @@ export default function ExpertApplicationForm() {
         return;
       }
 
-      alert("Your response have been recorded. We will notify you!!");
+      alert(
+        "Your response have been recorded. We will notify you through email!!"
+      );
 
       router.push("/");
 

@@ -37,16 +37,22 @@ export default function ExpertAvailabilityCalendar({
   };
 
   const saveAvailability = async () => {
-    setSavedAvailability({ ...availability });
-
     try {
+      expertId = "123243";
       const res = await fetch("/api/expert/availability", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ expertId, availability }),
       });
 
-      if (!res.ok) throw new Error("Failed to save");
+      const data = await res.json();
+
+      if (!data.status) {
+        console.log("error while saving", data.error);
+        alert(data.error.errors[0].longMessage);
+        return;
+      }
+      setSavedAvailability({ ...availability });
 
       alert("Availability saved!");
     } catch (err) {
