@@ -4,19 +4,18 @@ import connect from "@/dbconfig/dbconfig";
 import { ExpertAvailability } from "@/models/ExpertAvailability";
 
 export async function POST(req: NextRequest) {
-  // const { userId, redirectToSignIn } = await auth();
-  // if (!userId) return redirectToSignIn();
-  // if (!userId) {
-  //   return NextResponse.json({
-  //     status: false,
-  //     error: "Unauthorized",
-  //   });
-  // }
-
+  const { userId, redirectToSignIn } = await auth();
+  if (!userId) return redirectToSignIn();
+  if (!userId) {
+    return NextResponse.json({
+      status: false,
+      error: "Unauthorized",
+    });
+  }
   try {
     await connect();
-
-    const { expertId, availability } = await req.json();
+    const expertId = userId;
+    const { availability } = await req.json();
 
     if (!availability || typeof availability !== "object") {
       return NextResponse.json({
@@ -56,18 +55,20 @@ export async function GET(req: NextRequest) {
 
   try {
     await connect();
-    const availability = await ExpertAvailability.findOne({ expertId });
+    const availabilityDoc = await ExpertAvailability.findOne({ expertId });
 
-    if (!availability) {
+    if (!availabilityDoc) {
+      // You can choose to return an empty structure or null
       return NextResponse.json({
         status: true,
-        availability: null, // or empty {} if preferred
+        availability: {},
       });
     }
 
+    //  Only return the inner availability map
     return NextResponse.json({
       status: true,
-      availability,
+      availability: availabilityDoc.availability,
     });
   } catch (err) {
     console.error("GET /api/expert/availability error:", err);

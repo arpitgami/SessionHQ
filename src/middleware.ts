@@ -14,8 +14,7 @@ const isPublicRoute = createRouteMatcher([
   "/sign-in",
   "/sign-up",
   "/become_an_expert",
-  '/api/expert/(.*)',           
-  
+  "/api/expert/(.*)",
 ]);
 
 const isExpertRoute = createRouteMatcher([
@@ -38,9 +37,9 @@ export default clerkMiddleware(async (auth, req) => {
 
   // If user is not authenticated and trying to access protected routes direct to sign-in and then go to requested route
   if (!userId && !isPublicRoute(req)) {
-    const signInUrl = new URL("/sign-in", req.url);
-    signInUrl.searchParams.set("redirect_url", req.url);
-    return NextResponse.redirect(signInUrl);
+    const homeUrl = new URL("/", req.url);
+    homeUrl.searchParams.set("authError", "true");
+    return NextResponse.redirect(homeUrl);
   }
 
   // If user is authenticated, handle role-based redirections

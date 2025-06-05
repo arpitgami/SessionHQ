@@ -1,16 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { format, addDays } from "date-fns";
-
+import { useUser } from "@clerk/nextjs";
 const HOURS = Array.from({ length: 12 }, (_, i) => 8 + i); // 8AM to 8PM
 const today = new Date();
 
-export default function ExpertAvailabilityCalendar({
-  expertId,
-}: {
-  expertId: string;
-}) {
+export default function ExpertAvailabilityCalendar() {
+  const { user } = useUser();
+  const expertId = user?.id;
   const [savedAvailability, setSavedAvailability] = useState<{
     [date: string]: string[];
   }>({});
@@ -38,11 +36,11 @@ export default function ExpertAvailabilityCalendar({
 
   const saveAvailability = async () => {
     try {
-      expertId = "123243";
+      // expertId = "123243";
       const res = await fetch("/api/expert/availability", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ expertId, availability }),
+        body: JSON.stringify({ availability }),
       });
 
       const data = await res.json();
@@ -60,6 +58,39 @@ export default function ExpertAvailabilityCalendar({
       alert("Failed to save availability");
     }
   };
+  useEffect(() => {
+    const fetchAvailability = async () => {
+      try {
+        const res = await fetch(
+          `/api/expert/availability?expertId=${expertId}`
+        );
+        const data = await res.json();
+        // console.log(data);
+        if (data.status) {
+          const normalized: { [date: string]: string[] } = {};
+          for (let i = 0; i < 8; i++) {
+            const date = format(addDays(today, i), "yyyy-MM-dd");
+            normalized[date] = data.availability?.[date] || [];
+          }
+          console.log("Final normalized saved availability:", normalized);
+
+          setAvailability({ ...normalized });
+          setSavedAvailability({ ...normalized });
+        } else {
+          console.error("Failed to load availability");
+        }
+      } catch (err) {
+        console.error("Error loading availability", err);
+      }
+    };
+//  So, the flow is:
+// You load previously saved availability (which may include times in the past).
+
+// During rendering, isPast disables those slots, no matter what the saved data says.
+
+// The slot will appear gray (past), not green or blue, due to your class logic.
+    fetchAvailability();
+  }, [expertId]);
 
   return (
     <div className="p-4 bg-white rounded-xl shadow">
@@ -109,16 +140,17 @@ export default function ExpertAvailabilityCalendar({
                     return (
                       <td
                         key={dateStr + hour}
-                        className={`border border-gray-300 text-center py-2 ${isPast
-                          ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                          : wasSavedButRemoved
+                        className={`border border-gray-300 text-center py-2 ${
+                          isPast
+                            ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                            : wasSavedButRemoved
                             ? "bg-red-200 text-red-700 cursor-pointer" // ❌ Removed after being saved
                             : isUnchangedSaved
-                              ? "bg-green-500 text-white cursor-pointer" // ✅ Still saved and selected
-                              : isNewlySelected
-                                ? "bg-blue-500 text-white cursor-pointer" // 🔵 New selection
-                                : "bg-white hover:bg-blue-100 cursor-pointer" // ⚪ Default
-                          }`}
+                            ? "bg-green-500 text-white cursor-pointer" // ✅ Still saved and selected
+                            : isNewlySelected
+                            ? "bg-blue-500 text-white cursor-pointer" // 🔵 New selection
+                            : "bg-white hover:bg-blue-100 cursor-pointer" // ⚪ Default
+                        }`}
                         onClick={() => {
                           if (!isPast) toggleSlot(dateStr, hour);
                         }}

@@ -21,9 +21,9 @@ const clientNavLinks = [
 ];
 
 const expertNavLinks = [
-  { href: "/experts/requests", label: "Dashboard" },
-  { href: "/experts/calendar", label: "Calendar" },
   { href: "/experts/upcomingmeetings", label: "Sessions" },
+  { href: "/experts/calendar", label: "Calendar" },
+  { href: "/experts/requests", label: "Request" },
 ];
 
 export const Navigation = () => {
