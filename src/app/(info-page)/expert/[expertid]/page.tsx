@@ -8,6 +8,8 @@ import { FaLinkedin } from "react-icons/fa";
 import Slot from "@/component/modal/Slot"
 import AboutYou from "@/component/modal/AboutYou"
 import SessionIntent from "@/component/modal/SessionIntent"
+import LockYourSlot from "@/component/modal/LockYourSlot"
+import { useUser } from "@clerk/nextjs";
 
 interface Expert {
   clerkID: string;
@@ -35,6 +37,9 @@ export default function ExpertProfile() {
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({});
+  const { user, isLoaded } = useUser();
+  const [sessionLoaded, setSessionLoaded] = useState(false);
+
 
 
   useEffect(() => {
@@ -58,6 +63,23 @@ export default function ExpertProfile() {
 
   }, [expertid]);
 
+  //load previous usersession data
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch(`/api/user/saveUserSessionData?userid=${user?.id}`);
+        const data = await res.json();
+
+        if (data.status && data.isFound) {
+          setFormData(data.userData);
+          setSessionLoaded(true);
+        }
+      } catch (err) {
+        console.error("Error fetching session data", err);
+      }
+    })();
+  }, [user, isLoaded])
+
 
   function nextStep() {
     setStep((prev) => prev + 1);
@@ -77,8 +99,9 @@ export default function ExpertProfile() {
         <dialog id="my_modal" className="modal">
 
           {step == 1 && <Slot selectedSlot={selectedSlot} setSelectedSlot={setSelectedSlot} nextStep={nextStep} />}
-          {step == 2 && <AboutYou formData={formData} setFormData={setFormData} nextStep={nextStep} prevStep={prevStep} />}
+          {step == 2 && <AboutYou formData={formData} setFormData={setFormData} nextStep={nextStep} prevStep={prevStep} sessionLoaded={sessionLoaded} setSessionLoaded={setSessionLoaded} />}
           {step == 3 && <SessionIntent formData={formData} setFormData={setFormData} nextStep={nextStep} prevStep={prevStep} />}
+          {step == 4 && <LockYourSlot expert={expert} selectedSlot={selectedSlot} prevStep={prevStep} user={user} formData={formData} />}
 
         </dialog>
 

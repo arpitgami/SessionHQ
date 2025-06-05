@@ -12,6 +12,7 @@ const availability = {
 const Slot = ({ selectedSlot, setSelectedSlot, nextStep }) => {
 
     const handleSlotClick = (date, time) => {
+        // console.log({ date, time });    
         setSelectedSlot({ date, time });
     };
 

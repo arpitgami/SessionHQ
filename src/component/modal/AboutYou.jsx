@@ -1,14 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormField } from '@/component/expertform/forminputs';
 
 
-const AboutYou = ({ formData, setFormData, nextStep, prevStep }) => {
+const AboutYou = ({ formData, setFormData, nextStep, prevStep, sessionLoaded, setSessionLoaded }) => {
 
+
+
+    const resetForm = () => {
+        setFormData({});
+        setSessionLoaded(false);
+    };
 
     function handleSubmit(e) {
         e.preventDefault();
         nextStep()
     }
+
 
     const updateField = (key, value) => {
         setFormData(prev => ({ ...prev, [key]: value }));
@@ -18,9 +25,20 @@ const AboutYou = ({ formData, setFormData, nextStep, prevStep }) => {
         <>
 
             <form onSubmit={handleSubmit} className="modal-box max-w-xl space-y-6 bg-white p-6 ">
+                {sessionLoaded && (
+                    <div className="flex flex-row text-sm">
+                        <p>Previous session data loaded. </p>
+                        <button
+                            onClick={resetForm}
+                            className="underline"
+                        >
+                            Reset Form
+                        </button>
+                    </div>
+                )}
                 <FormField label="Role / Title" required>
                     <input
-                        required
+                        // required
                         type="text"
                         className="input input-bordered w-full"
                         placeholder="e.g. Solo founder, Product Manager"
@@ -31,7 +49,7 @@ const AboutYou = ({ formData, setFormData, nextStep, prevStep }) => {
 
                 <FormField label="Industry or Domain" required>
                     <input
-                        required
+                        // required
                         type="text"
                         className="input input-bordered w-full"
                         placeholder="e.g. Fintech, SaaS"
@@ -42,7 +60,7 @@ const AboutYou = ({ formData, setFormData, nextStep, prevStep }) => {
 
                 <FormField label="Stage of Work" required>
                     <select
-                        required
+                        // required
                         className="select select-bordered w-full"
                         value={formData.stage || ''}
                         onChange={(e) => updateField('stage', e.target.value)}
@@ -57,7 +75,7 @@ const AboutYou = ({ formData, setFormData, nextStep, prevStep }) => {
 
                 <FormField label="About Startup" required>
                     <textarea
-                        required
+                        // required
                         className="textarea textarea-bordered w-full"
                         placeholder="1–2 lines about what you do"
                         value={formData.aboutStartup || ''}
