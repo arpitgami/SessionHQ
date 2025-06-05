@@ -49,13 +49,13 @@ export async function GET(req: NextRequest) {
     const id = searchParams.get("id");
 
     if (!id) {
-      const experts = await ExpertApplication.find({
-        status: "pending",
-      }).select("-_id -__v -createdAt -updatedAt");
-      console.log(experts);
+      const experts = await ExpertApplication.find({ status: "pending" }).select(
+        "-_id -__v -createdAt -updatedAt"
+      );
+      // console.log(experts);
       return NextResponse.json({ status: true, data: experts });
     }
-    console.log("id:", id);
+    // console.log("id:", id);
 
     const expert = await ExpertApplication.find({ clerkID: id });
     return NextResponse.json({ status: true, data: expert });

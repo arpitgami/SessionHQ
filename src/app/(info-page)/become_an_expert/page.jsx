@@ -7,6 +7,9 @@ import Step3 from "@/component/expertform/step3";
 import uploadImage from "@/hooks/uploadImage";
 import { useRouter } from "next/navigation";
 
+const CLOUDINARY_API_KEY = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY;
+
+
 export default function ExpertApplicationForm() {
   const router = useRouter();
   const [step, setStep] = useState(1);
@@ -65,13 +68,24 @@ export default function ExpertApplicationForm() {
     // ✅ If everything is valid
     console.log("Submitting:", formData);
 
+    let imageURLToUse = formData.imageURL;
+    let publicIDToUse = formData.publicID;
+
     //uploading image to cloudinary
     if (!formData.imageURL) {
       console.log("expert image before calling uplaodimage", expertImage);
       const { imageURL, public_id } = await uploadImage(
         expertImage,
-        process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY
+        CLOUDINARY_API_KEY
       );
+      if (!imageURL || !public_id) {
+        console.error("Image URL not generated")
+        return;
+      }
+      // Set local variables directly
+      imageURLToUse = imageURL;
+      publicIDToUse = public_id;
+      //form data
       updateField("imageURL", imageURL);
       updateField("publicID", public_id);
     }
@@ -79,7 +93,11 @@ export default function ExpertApplicationForm() {
     try {
       const res = await fetch("/api/expert/expertdata", {
         method: "POST",
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          imageURL: imageURLToUse,
+          publicID: publicIDToUse
+        }),
         headers: {
           "Content-Type": "application/json",
         },

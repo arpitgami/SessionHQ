@@ -19,7 +19,7 @@ export const ExpertCard = ({ expert }: { expert: Expert }) => {
       {/* Top: Avatar + Name */}
       <div className="flex items-center gap-4">
         <Image
-          src={expert.imageURL || "/default-avatar.png"}
+          src={expert.imageURL}
           alt={expert.fullName}
           width={56}
           height={56}

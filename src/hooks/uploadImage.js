@@ -1,12 +1,11 @@
 
 import { v4 as uuidv4 } from 'uuid';
-const CLOUDINARY_API_KEY = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY;
 
-export default async function uploadImage(expertImage,) {
+export default async function uploadImage(expertImage, CLOUDINARY_API_KEY) {
   try {
     const public_id = uuidv4();
-    // console.log("publicid : ", public_id);
-    // console.log("image", expertImage);
+    console.log("publicid : ", public_id);
+    console.log("image", expertImage, CLOUDINARY_API_KEY);
     const response = await fetch("api/expert/getsignature",
       {
         method: "POST",
@@ -21,7 +20,7 @@ export default async function uploadImage(expertImage,) {
       }
     );
     const data = await response.json();
-    // console.log("getsignature respnse data: ", data);
+    console.log("getsignature respnse data: ", data);
 
     if (!data.status) {
       console.errror("error while getting signature", data);
@@ -34,6 +33,7 @@ export default async function uploadImage(expertImage,) {
     formData.append("upload_preset", "sessionhq_image_upload");
     formData.append("timestamp", timestamp);
     formData.append("signature", signature);
+    console.log("Key: ", CLOUDINARY_API_KEY);
     formData.append("api_key", CLOUDINARY_API_KEY);
 
     const cloudinaryResponse = await fetch(
@@ -44,7 +44,7 @@ export default async function uploadImage(expertImage,) {
       }
     );
     const cloudinaryData = await cloudinaryResponse.json();
-    // console.log("cloudinary data:", cloudinaryData);
+    console.log("cloudinary data:", cloudinaryData);
 
 
     const imageURL = cloudinaryData.secure_url
