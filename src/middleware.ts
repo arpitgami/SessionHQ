@@ -1,6 +1,66 @@
-import { clerkMiddleware } from "@clerk/nextjs/server";
+// middleware.ts
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
-export default clerkMiddleware();
+// Define the shape of your user metadata
+interface UserMetadata {
+  role?: "expert"; // Only experts have role defined, clients have no role property
+}
+
+// Define route matchers
+const isPublicRoute = createRouteMatcher([
+  "/",
+  "/explore",
+  "/sign-in",
+  "/sign-up",
+  "/become_an_expert",
+  '/api/expert/(.*)',           
+  
+]);
+
+const isExpertRoute = createRouteMatcher([
+  "/experts/requests",
+  "/experts/calendar",
+  "/experts/upcomingmeetings",
+]);
+
+export default clerkMiddleware(async (auth, req) => {
+  const { userId, sessionClaims } = await auth();
+  const url = req.nextUrl.clone();
+  const pathname = url.pathname;
+
+  // Get user role from session claims.
+  const role = sessionClaims?.role;
+
+  console.log("Found role:", role); // Debug log
+
+  const isExpert = role === "expert";
+
+  // If user is not authenticated and trying to access protected routes direct to sign-in and then go to requested route
+  if (!userId && !isPublicRoute(req)) {
+    const signInUrl = new URL("/sign-in", req.url);
+    signInUrl.searchParams.set("redirect_url", req.url);
+    return NextResponse.redirect(signInUrl);
+  }
+
+  // If user is authenticated, handle role-based redirections
+  if (userId) {
+    // Redirect expert away from client routes
+    const clientPages = ["/", "/explore", "/become_an_expert"];
+    if (isExpert && clientPages.includes(pathname)) {
+      url.pathname = "/experts/calendar";
+      return NextResponse.redirect(url);
+    }
+
+    // Redirect non-expert users (clients) away from expert-only routes
+    if (!isExpert && isExpertRoute(req)) {
+      url.pathname = "/";
+      return NextResponse.redirect(url);
+    }
+  }
+
+  return NextResponse.next();
+});
 
 export const config = {
   matcher: [

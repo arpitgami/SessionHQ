@@ -2,10 +2,13 @@
 "use client";
 import { ExpertCard } from "@/component/ExpertCard";
 import { useEffect, useState } from "react";
-
+import useUserGuard from "@/hooks/useUserGuard";
 export default function ExplorePage() {
   const [experts, setExperts] = useState([]);
   const [loading, setLoading] = useState(true);
+  useUserGuard();
+
+  // if (checking) return <p>Loading...</p>;
 
   useEffect(() => {
     const fetchExperts = async () => {

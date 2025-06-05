@@ -12,18 +12,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
-  const hideNavbarRoutes = ["/login", "/signup", "/experts/calendar"];
+  const hideNavbarRoutes = ["/login", "/signup"];
 
   const shouldHideNavbar =
     hideNavbarRoutes.includes(pathname) || pathname.startsWith("/room/");
 
   useEffect(() => {
-
     // console.log("pathname : ", pathname, shouldHideNavbar);
-  }, [])
+  }, []);
 
   return (
-    <ClerkProvider >
+    <ClerkProvider>
       <html data-theme="lofi" lang="en">
         <body>
           {!shouldHideNavbar && <Navigation />}

@@ -19,11 +19,17 @@ export async function POST(req: NextRequest) {
     });
 
     const clerkID = user.id;
+    // 2. Add role = "expert" to Clerk publicMetadata
+    client.users.updateUserMetadata(clerkID, {
+      publicMetadata: {
+        role: "expert",
+      },
+    });
     // console.log("clerkid", clerkID);
     delete body.password;
     delete body.confirmPassword;
     body.clerkID = clerkID;
-
+    // console.log(body);
     const newExpert = await new ExpertApplication(body);
 
     await newExpert.save();
@@ -40,12 +46,12 @@ export async function GET(req: NextRequest) {
   try {
     await connect();
     const { searchParams } = new URL(req.url);
-    const id = searchParams.get('id');
+    const id = searchParams.get("id");
 
     if (!id) {
-      const experts = await ExpertApplication.find({ status: "pending" }).select(
-        "-_id -__v -createdAt -updatedAt"
-      );
+      const experts = await ExpertApplication.find({
+        status: "pending",
+      }).select("-_id -__v -createdAt -updatedAt");
       console.log(experts);
       return NextResponse.json({ status: true, data: experts });
     }
@@ -53,12 +59,8 @@ export async function GET(req: NextRequest) {
 
     const expert = await ExpertApplication.find({ clerkID: id });
     return NextResponse.json({ status: true, data: expert });
-
-
   } catch (error) {
     console.error("GET /api/experts error:", error);
-    return NextResponse.json(
-      { status: false, error: error }
-    );
+    return NextResponse.json({ status: false, error: error });
   }
 }
