@@ -15,7 +15,7 @@ const SessionIntent = ({ formData, setFormData, nextStep, prevStep }) => {
         <form onSubmit={handleSubmit} className="modal-box max-w-xl space-y-6 bg-white p-6 rounded-xl shadow-lg w-ful mt-10">
             <FormField label="What are you looking for help with?" required>
                 <textarea
-                    required
+                    // required
                     className="textarea textarea-bordered w-full"
                     placeholder="Describe your problem or goal"
                     value={formData.helpWith || ''}
@@ -25,11 +25,11 @@ const SessionIntent = ({ formData, setFormData, nextStep, prevStep }) => {
 
             <FormField label="Why do you want to talk to an expert?" required>
                 <textarea
-                    required
+                    // required
                     className="textarea textarea-bordered w-full"
                     placeholder="Your motivation in a sentence or two"
-                    value={formData.whyExpert || ''}
-                    onChange={(e) => updateField('whyExpert', e.target.value)}
+                    value={formData.reasonToTalk || ''}
+                    onChange={(e) => updateField('reasonToTalk', e.target.value)}
                 />
             </FormField>
 
