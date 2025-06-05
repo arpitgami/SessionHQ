@@ -14,6 +14,7 @@ export async function POST(req: NextRequest) {
         const body = await req.json();
         // console.log(body);
         const timestamp = Math.round(Date.now() / 1000);
+
         const paramsToSign = {
             public_id: body.public_id,
             upload_preset: "sessionhq_image_upload",
