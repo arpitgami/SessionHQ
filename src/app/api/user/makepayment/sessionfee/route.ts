@@ -25,12 +25,12 @@ export async function POST(req: NextRequest) {
                     price_data: {
                         currency: "usd",
                         product_data: {
-                            name: `Reservation Fee for 1-on-1 Session with ${expert.fullName}`,
+                            name: `1-on-1 Session with ${expert.fullName}`,
                             description: `${expert.headline} · ${expert.expertise.join(", ")}`,
                             images: [expert.imageURL], // optional but powerful
                         },
 
-                        unit_amount: 5 * 100,
+                        unit_amount: Math.round(price * 100),
                     },
                     quantity: 1,
                 },
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
             success_url: `${process.env.NEXT_PUBLIC_APP_URL}/success`,
             cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/failed`,
             metadata: {
-                sessionName: "Reservation Fee Payement",
+                sessionName: "Final Payement",
                 expertID: expert.clerkID,
                 clientID: userID,
                 slot: JSON.stringify(slot)
