@@ -27,18 +27,22 @@ export async function POST(req: NextRequest) {
         if (type == "checkout.session.completed") {
 
             const session = event.data.object as Stripe.Checkout.Session;
+            const paymentIntentId = session.payment_intent;
+            console.log("paymentIntentId:", paymentIntentId);
             const sessionName = session.metadata?.sessionName;
             const expertID = session.metadata?.expertID;
             const userID = session.metadata?.clientID;
-            const slot = JSON.parse(session.metadata?.slot || "{}");
+            const slot = session.metadata?.slot;
 
-            // console.log("metadata from webhook : ", session.metadata);
 
             //push the request in the backend
             if (sessionName == "Reservation Fee Payement") {
 
+                console.log("metadata from webhook : ", session.metadata);
+                const slotISO = JSON.parse(slot!);             // removes the extra quotes
+                const slotDate = new Date(slotISO);
                 await connect();
-                const newRequest = await new Request({ expertID, userID, slot });
+                const newRequest = await new Request({ expertID, userID, slot: slotDate, paymentIntentID: paymentIntentId });
                 await newRequest.save();
 
             }// Create the meeting

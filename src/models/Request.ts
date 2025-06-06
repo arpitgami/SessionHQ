@@ -11,14 +11,8 @@ const RequestSchema = new mongoose.Schema(
             required: true,
         },
         slot: {
-            date: {
-                type: String,
-                required: true,
-            },
-            time: {
-                type: String,
-                required: true,
-            },
+            type: Date,
+            required: true
         },
         status: {
             type: String,
@@ -28,6 +22,10 @@ const RequestSchema = new mongoose.Schema(
         isPayment: {
             type: Boolean,
             default: false,
+        },
+        paymentIntentID: {
+            type: String,
+            required: true
         }
     },
     {
@@ -35,4 +33,4 @@ const RequestSchema = new mongoose.Schema(
     }
 );
 
-export const Request = mongoose.models.Request || mongoose.model("Request ", RequestSchema);
+export const Request = mongoose.models.Request || mongoose.model("Request", RequestSchema);

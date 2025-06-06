@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
         const { expertID, userID, slot } = body;
-        console.log(body);
+        console.log("Make Payment body: ", body);
 
         await connect();
 
@@ -17,6 +17,8 @@ export async function POST(req: NextRequest) {
         if (!expert) return NextResponse.json({ error: "Expert not found" }, { status: 404 });
 
         const price = expert.hourlyRate;
+        const slotTimestamp = new Date(`${slot.date}T${slot.time}:00+05:30`); // saving in UTC
+        // console.log("slotTimestamp from makepayment:", slotTimestamp);
 
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ["card"],
@@ -42,7 +44,7 @@ export async function POST(req: NextRequest) {
                 sessionName: "Reservation Fee Payement",
                 expertID: expert.clerkID,
                 clientID: userID,
-                slot: JSON.stringify(slot)
+                slot: JSON.stringify(slotTimestamp)
             },
         });
 
