@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
         const { expertID, userID, slot } = body;
-        console.log("Make Payment body: ", body);
+        console.log(body);
 
         await connect();
 
@@ -17,8 +17,6 @@ export async function POST(req: NextRequest) {
         if (!expert) return NextResponse.json({ error: "Expert not found" }, { status: 404 });
 
         const price = expert.hourlyRate;
-        const slotTimestamp = new Date(`${slot.date}T${slot.time}:00+05:30`); // saving in UTC
-        // console.log("slotTimestamp from makepayment:", slotTimestamp);
 
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ["card"],
@@ -27,12 +25,12 @@ export async function POST(req: NextRequest) {
                     price_data: {
                         currency: "usd",
                         product_data: {
-                            name: `Reservation Fee for 1-on-1 Session with ${expert.fullName}`,
+                            name: `1-on-1 Session with ${expert.fullName}`,
                             description: `${expert.headline} · ${expert.expertise.join(", ")}`,
                             images: [expert.imageURL], // optional but powerful
                         },
 
-                        unit_amount: 5 * 100,
+                        unit_amount: Math.round(price * 100),
                     },
                     quantity: 1,
                 },
@@ -41,10 +39,10 @@ export async function POST(req: NextRequest) {
             success_url: `${process.env.NEXT_PUBLIC_APP_URL}/success`,
             cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/failed`,
             metadata: {
-                sessionName: "Reservation Fee Payement",
+                sessionName: "Final Payement",
                 expertID: expert.clerkID,
                 clientID: userID,
-                slot: JSON.stringify(slotTimestamp)
+                slot: JSON.stringify(slot)
             },
         });
 

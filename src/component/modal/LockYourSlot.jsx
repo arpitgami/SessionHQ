@@ -53,6 +53,7 @@ const LockYourSlot = ({ selectedSlot, expert, prevStep, user, formData }) => {
         await saveuserSessionData();
         //stripe checkout
         try {
+            console.log("selected slot : ", selectedSlot);
             const res = await fetch("/api/user/makepayment/reservationfee", {
                 method: "POST",
                 body: JSON.stringify({
