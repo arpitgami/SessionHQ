@@ -1,4 +1,5 @@
 "use client";
+
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Navigation } from "@/component/Navbar";
@@ -12,20 +13,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
-  const hideNavbarRoutes = ["/login", "/signup"];
-
-  const shouldHideNavbar =
-    hideNavbarRoutes.includes(pathname) || pathname.startsWith("/room/");
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    // console.log("pathname : ", pathname, shouldHideNavbar);
+    setIsMounted(true);
   }, []);
+
+  const hideNavbarRoutes = ["/login", "/signup"];
+  const shouldHideNavbar =
+    hideNavbarRoutes.includes(pathname) || pathname.startsWith("/room/");
 
   return (
     <ClerkProvider>
       <html data-theme="lofi" lang="en">
         <body>
-          {!shouldHideNavbar && <Navigation />}
+          {/* Wait until after mount to render Navbar to avoid hydration mismatch */}
+          {isMounted && !shouldHideNavbar && <Navigation />}
           {children}
         </body>
       </html>

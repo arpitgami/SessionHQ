@@ -12,6 +12,7 @@ import {
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import NotificationDropdown from "@/component/Notification";
 
 // Define separate navs
 const clientNavLinks = [
@@ -78,6 +79,7 @@ export const Navigation = () => {
             </SignUpButton>
           </SignedOut>
           <SignedIn>
+            {!isExpert && <NotificationDropdown />}
             <UserButton />
           </SignedIn>
         </div>
