@@ -67,6 +67,8 @@ export async function GET(req: NextRequest) {
         // Fetch fresh data after update
         const updatedRequests = await Request.find(filter).sort({ slot: 1 });
 
+
+
         return NextResponse.json({ status: true, data: updatedRequests });
     } catch (error) {
         console.error("Error fetching/updating requests:", error);

@@ -25,11 +25,11 @@ const expertNavLinks = [
   { href: "/experts/calendar", label: "Calendar" },
   { href: "/experts/requests", label: "Request" },
 ];
-
 export const Navigation = () => {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const { user } = useUser();
+
 
   const isExpert = user?.publicMetadata?.role === "expert";
   const navLinks = isExpert ? expertNavLinks : clientNavLinks;
@@ -54,11 +54,10 @@ export const Navigation = () => {
               <li key={href}>
                 <Link
                   href={href}
-                  className={`text-sm font-medium text-white pb-1 border-b-2 transition-all duration-200 transform hover:scale-110 ${
-                    isActive
-                      ? "border-white scale-105"
-                      : "border-transparent hover:scale-125"
-                  }`}
+                  className={`text-sm font-medium text-white pb-1 border-b-2 transition-all duration-200 transform hover:scale-110 ${isActive
+                    ? "border-white scale-105"
+                    : "border-transparent hover:scale-125"
+                    }`}
                 >
                   {label}
                 </Link>
@@ -101,9 +100,8 @@ export const Navigation = () => {
                 <li key={href}>
                   <Link
                     href={href}
-                    className={`block text-sm font-medium text-white border-b-2 pb-1 ${
-                      isActive ? "border-white" : "border-transparent"
-                    }`}
+                    className={`block text-sm font-medium text-white border-b-2 pb-1 ${isActive ? "border-white" : "border-transparent"
+                      }`}
                     onClick={() => setMenuOpen(false)}
                   >
                     {label}
