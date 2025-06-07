@@ -11,19 +11,14 @@ const MeetingSchema = new mongoose.Schema(
             required: true,
         },
         slot: {
-            date: {
-                type: String,
-                required: true,
-            },
-            time: {
-                type: String,
-                required: true,
-            },
+            type: Date,
+            required: true
         },
-    },
-    {
-        timestamps: true, // adds createdAt and updatedAt
+        roomID: {
+            type: String,
+            required: true
+        }
     }
 );
 
-export const Meeting = mongoose.models.Meeting || mongoose.model("Meeting ", MeetingSchema);
+export const Meeting = mongoose.models.Meeting || mongoose.model("Meeting", MeetingSchema);

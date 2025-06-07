@@ -7,7 +7,7 @@ const StreamPlayer = (props) => {
 
     const containerStyles = isScreenSharing
         ? !isLocalUser
-            ? 'w-[200px] h-[120px]' // smaller size for your own video during screen share
+            ? 'w-[200px] h-[120px] my-8' // smaller size for your own video during screen share
             : 'w-full'    // larger size for screen-shared stream
         : 'w-[500px] ';   // default equal sizes when no screen sharing
 

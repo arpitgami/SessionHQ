@@ -22,6 +22,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/api/socket/socket.js", "src/component/ChatMessage.jsx", "src/component/ChatSection.jsx", "src/app/room/[roomid]/page.jsx", "src/component/modal/Slot.jsx", "src/app/modal/page.jsx", "src/app/api/user/saveUserSessionData"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/api/socket/socket.js", "src/component/room/ChatMessage.jsx", "src/component/room/ChatSection.jsx", "src/app/room/[roomid]/page.jsx", "src/component/modal/Slot.jsx", "src/app/modal/page.jsx", "src/app/api/user/saveUserSessionData"],
   "exclude": ["node_modules"]
 }

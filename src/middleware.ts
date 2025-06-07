@@ -16,7 +16,8 @@ const isPublicRoute = createRouteMatcher([
   "/become_an_expert",
   '/api/expert/(.*)',
   '/api/stripe/webhook',
-  '/api/request/getrequest'
+  '/api/request/getrequest',
+  '/api/meeting/getmeeting'
 ]);
 
 const isExpertRoute = createRouteMatcher([

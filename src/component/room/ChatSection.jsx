@@ -3,12 +3,14 @@
 import { useSocket } from "@/context/socket";
 import ChatMessage from "./ChatMessage";
 import { useState, useEffect, useRef } from "react";
+import { useUser } from "@clerk/nextjs";
 
 const ChatSection = ({ currentUser, roomid }) => {
     const chatRef = useRef(null);
     const { socket, messages } = useSocket();
 
     const [text, setText] = useState("");
+    const { user, isLoaded } = useUser();
 
     useEffect(() => {
         // Scroll to bottom on new message
@@ -18,9 +20,13 @@ const ChatSection = ({ currentUser, roomid }) => {
     }, [messages]);
 
     function handleSend() {
+        if (!isLoaded || !user) {
+            alert("loading user");
+            return;
+        }
         if (text.trim() === "") return;
         socket.emit("send-message", {
-            user: "arpit1",
+            user: currentUser,
             message: text,
             roomid: roomid
         });

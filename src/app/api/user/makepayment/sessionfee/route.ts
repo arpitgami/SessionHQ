@@ -13,6 +13,8 @@ export async function POST(req: NextRequest) {
         await connect();
 
         const expert = await ExpertApplication.findOne({ clerkID: expertID });
+        const slotTimestamp = new Date(`${slot.date}T${slot.time}:00+05:30`); // saving in UTC
+
 
         if (!expert) return NextResponse.json({ error: "Expert not found" }, { status: 404 });
 
@@ -39,10 +41,10 @@ export async function POST(req: NextRequest) {
             success_url: `${process.env.NEXT_PUBLIC_APP_URL}/success`,
             cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/failed`,
             metadata: {
-                sessionName: "Final Payement",
+                sessionName: "Final Payment",
                 expertID: expert.clerkID,
                 clientID: userID,
-                slot: JSON.stringify(slot)
+                slot: JSON.stringify(slotTimestamp)
             },
         });
 

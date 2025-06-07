@@ -5,7 +5,7 @@ import { FaMicrophone, FaMicrophoneSlash, FaVideo, FaVideoSlash } from "react-ic
 import { MdScreenShare, MdStopScreenShare } from "react-icons/md";
 
 
-export default function ControlPanel({ stream, setStream, setIsScreenSharing, isScreenSharing, call, isOtherUserSharingScreen }) {
+export default function ControlPannel({ stream, setStream, setIsScreenSharing, isScreenSharing, call, isOtherUserSharingScreen }) {
     const [micOn, setMicOn] = useState(true);
     const [videoOn, setVideoOn] = useState(true);
 
@@ -97,7 +97,7 @@ export default function ControlPanel({ stream, setStream, setIsScreenSharing, is
     };
 
     return (
-        <div className="flex justify-center gap-4 p-4 rounded-xl bg-base-100 shadow-md self-center ">
+        <div className="flex justify-center gap-4 p-4 rounded-xl bg-base-100 shadow-sm self-center ">
             <button className={`btn bg-base-100 btn-circle ${!micOn ? "bg-red-500" : ""} `} onClick={toggleMic}>
                 {micOn ? (
                     <FaMicrophone />
