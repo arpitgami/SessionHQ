@@ -10,7 +10,7 @@ export default function Home() {
 
   useEffect(() => {
     if (authError) {
-      alert("Please sign in before to go that page.....");
+      alert("Please sign in before going to that page.....");
     }
   }, [authError]);
 
