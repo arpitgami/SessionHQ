@@ -7,54 +7,57 @@ import { error } from "console";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(req: NextRequest) {
+  const payload = await req.text();
+  const response = await JSON.parse(payload);
 
-    const payload = await req.text();
-    const response = await JSON.parse(payload);
+  const sig = req.headers.get("stripe-signature");
+  // console.log("sig: ", sig);
 
-    const sig = req.headers.get('stripe-signature');
-    // console.log("sig: ", sig);
+  try {
+    let event = stripe.webhooks.constructEvent(
+      payload,
+      sig!,
+      process.env.STRIPE_WEBHOOK_SECRET!
+    );
 
-    try {
-        let event = stripe.webhooks.constructEvent(
-            payload,
-            sig!,
-            process.env.STRIPE_WEBHOOK_SECRET!
-        );
+    const type = event.type;
+    // console.log("type:", type);
 
-        const type = event.type;
-        // console.log("type:", type);
+    if (type == "checkout.session.completed") {
+      const session = event.data.object as Stripe.Checkout.Session;
+      console.log("session", session);
+      const paymentIntentId = session.payment_intent;
+      console.log("paymentIntentId:", paymentIntentId);
+      const sessionName = session.metadata?.sessionName;
+      const expertID = session.metadata?.expertID;
+      const expertName = session.metadata?.expertName;
+      const userID = session.metadata?.clientID;
+      const slot = session.metadata?.slot;
 
-        if (type == "checkout.session.completed") {
-
-            const session = event.data.object as Stripe.Checkout.Session;
-            const paymentIntentId = session.payment_intent;
-            console.log("paymentIntentId:", paymentIntentId);
-            const sessionName = session.metadata?.sessionName;
-            const expertID = session.metadata?.expertID;
-            const userID = session.metadata?.clientID;
-            const slot = session.metadata?.slot;
-
-
-            //push the request in the backend
-            if (sessionName == "Reservation Fee Payement") {
-
-                console.log("metadata from webhook : ", session.metadata);
-                const slotISO = JSON.parse(slot!);             // removes the extra quotes
-                const slotDate = new Date(slotISO);
-                await connect();
-                const newRequest = await new Request({ expertID, userID, slot: slotDate, paymentIntentID: paymentIntentId });
-                await newRequest.save();
-
-            }// Create the meeting
-            else if (sessionName == "Final Payement") {
-                //meeting schedule
-            }
-
-        }
-
-        return NextResponse.json({ status: true, event: event })
-    } catch (err: any) {
-        console.error("Webhook signature verification failed:", err.message);
-        return NextResponse.json({ status: false, error: error });
+      //push the request in the backend
+      if (sessionName == "Reservation Fee Payement") {
+        console.log("metadata from webhook : ", session.metadata);
+        const slotISO = JSON.parse(slot!); // removes the extra quotes
+        const slotDate = new Date(slotISO);
+        await connect();
+        const newRequest = await new Request({
+          expertID,
+          expertName,
+          userID,
+          slot: slotDate,
+          paymentIntentID: paymentIntentId,
+        });
+        // console.log("newRequest", newRequest);
+        await newRequest.save();
+      } // Create the meeting
+      else if (sessionName == "Final Payement") {
+        //meeting schedule
+      }
     }
+
+    return NextResponse.json({ status: true, event: event });
+  } catch (err: any) {
+    console.error("Webhook signature verification failed:", err.message);
+    return NextResponse.json({ status: false, error: error });
+  }
 }

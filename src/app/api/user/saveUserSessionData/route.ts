@@ -29,7 +29,7 @@ export async function GET(req: NextRequest) {
     try {
         await connect();
         const { searchParams } = new URL(req.url);
-        const userId = searchParams.get('userid');
+        const userId = searchParams.get('userId');
 
         if (!userId) {
             return NextResponse.json({

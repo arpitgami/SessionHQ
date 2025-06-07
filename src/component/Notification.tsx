@@ -1,70 +1,107 @@
+"use client";
+
 import { Bell } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 type Request = {
   _id: string;
-  expertName: string; // Assume you've populated expertName via expertID on the server
-  slot: string; // ISO date string
+  expertName: string;
+  slot: string;
   status: "pending" | "accepted" | "rejected" | "declined" | "expired";
   isPayment: boolean;
 };
 
-const mockRequests: Request[] = [
-  {
-    _id: "1",
-    expertName: "Dr. Maya Singh",
-    slot: "2025-06-08T10:00:00.000Z",
-    status: "pending",
-    isPayment: false,
-  },
-  {
-    _id: "2",
-    expertName: "John Kumar",
-    slot: "2025-06-09T15:00:00.000Z",
-    status: "accepted",
-    isPayment: false,
-  },
-  {
-    _id: "3",
-    expertName: "Sarah Verma",
-    slot: "2025-06-05T11:00:00.000Z",
-    status: "rejected",
-    isPayment: false,
-  },
-  {
-    _id: "4",
-    expertName: "Ravi Mehra",
-    slot: "2025-06-06T17:00:00.000Z",
-    status: "declined",
-    isPayment: false,
-  },
-  {
-    _id: "5",
-    expertName: "Anjali Patil",
-    slot: "2025-06-01T09:00:00.000Z",
-    status: "expired",
-    isPayment: false,
-  },
-];
-
 export default function NotificationDropdown() {
-  const [requests] = useState<Request[]>(mockRequests);
+  console.log("NotificationDropdown rendered");
+  const [requests, setRequests] = useState<Request[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  useEffect(() => {
+    console.log("NotificationDropdown mounted");
+  }, []);
+  const fetchRequests = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/request");
+      const data = await res.json();
+      if (data.status) {
+        setRequests(data.data);
+        console.log(data);
+      } else {
+        console.log("Error fetching requests:", data.message);
+      }
+    } catch (err) {
+      console.error("Error fetching requests:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDropdownToggle = () => {
+    const newIsOpen = !isOpen;
+    setIsOpen(newIsOpen);
+
+    if (newIsOpen) {
+      fetchRequests();
+    }
+  };
+
+  // Auto-close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
+
+  // Auto refresh every 60 seconds when dropdown is open
+  useEffect(() => {
+    if (isOpen) {
+      intervalRef.current = setInterval(() => {
+        fetchRequests();
+      }, 60000); // every 60 seconds
+    } //if it is not open and interval has been done then reset it to default if not there
+    else if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [isOpen]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case "accepted":
         return "bg-green-500 text-white";
       case "rejected":
-        return "badge badge-error";
+        return "bg-red-500 text-white";
       case "declined":
-        return "badge badge-warning";
+        return "bg-yellow-500 text-white";
       case "expired":
-        return "badge badge-neutral";
+        return "bg-gray-500 text-white";
       default:
         return "bg-purple-500 text-white"; // pending
     }
   };
-
+  //format iso to indian standard time
   const formatSlot = (slot: string) => {
     const date = new Date(slot);
     return date.toLocaleString("en-IN", {
@@ -74,25 +111,38 @@ export default function NotificationDropdown() {
   };
 
   return (
-    <div className="dropdown dropdown-end z-50">
-      <label tabIndex={0} className="btn btn-ghost btn-circle">
+    <div className="relative" ref={dropdownRef}>
+      <button
+        className="btn btn-ghost btn-circle"
+        onClick={handleDropdownToggle}
+      >
         <div className="indicator">
           <Bell className="h-5 w-5" />
           {requests.some((r) => r.status === "pending") && (
             <span className="badge badge-xs badge-primary indicator-item" />
           )}
         </div>
-      </label>
+      </button>
 
       <div
-        tabIndex={0}
-        className="mt-3 dropdown-content w-96 bg-slate-100 dark:bg-slate-800 shadow-xl rounded-xl max-h-[400px] overflow-y-auto border border-slate-300 dark:border-slate-700"
+        className={`absolute right-0 mt-2 w-96 bg-slate-100 dark:bg-slate-800 shadow-xl rounded-xl max-h-[400px] overflow-y-auto border border-slate-300 dark:border-slate-700 z-50 transition-all duration-300 ease-in-out transform ${
+          isOpen
+            ? "opacity-100 scale-100 pointer-events-auto"
+            : "opacity-0 scale-95 pointer-events-none"
+        }`}
       >
         <div className="p-4">
           <h2 className="font-semibold text-lg mb-2">Session Requests</h2>
 
-          {requests.length === 0 ? (
-            <p className="text-gray-500 text-sm">No requests available.</p>
+          {loading ? (
+            <div className="flex items-center justify-center py-8">
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+              <span className="ml-2 text-sm text-gray-500">Loading...</span>
+            </div>
+          ) : requests.length === 0 ? (
+            <p className="text-gray-500 text-sm text-center py-8">
+              No requests available.
+            </p>
           ) : (
             requests.map((r) => (
               <div
@@ -108,11 +158,9 @@ export default function NotificationDropdown() {
                     {r.expertName}
                   </span>
                   <span
-                    className={`capitalize px-3 py-1 text-xs font-semibold rounded-full ${
-                      r.status === "accepted"
-                        ? getStatusColor(r.status)
-                        : `${getStatusColor(r.status)} text-white`
-                    }`}
+                    className={`capitalize px-3 py-1 text-xs font-semibold rounded-full ${getStatusColor(
+                      r.status
+                    )}`}
                   >
                     {r.status}
                   </span>
@@ -140,13 +188,11 @@ export default function NotificationDropdown() {
                     ⏳ Waiting for expert to respond
                   </p>
                 )}
-
                 {r.status === "declined" && (
                   <p className="text-xs text-yellow-700 mt-1 font-medium">
                     ⚠️ Expert did not respond in time. Refund initiated.
                   </p>
                 )}
-
                 {r.status === "rejected" && (
                   <p className="text-xs text-red-600 mt-1 font-medium">
                     ❌ Expert rejected the request. Refund initiated

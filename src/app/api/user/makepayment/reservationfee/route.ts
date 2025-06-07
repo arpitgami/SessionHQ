@@ -43,6 +43,7 @@ export async function POST(req: NextRequest) {
             metadata: {
                 sessionName: "Reservation Fee Payement",
                 expertID: expert.clerkID,
+                expertName: expert.fullName,
                 clientID: userID,
                 slot: JSON.stringify(slotTimestamp)
             },
