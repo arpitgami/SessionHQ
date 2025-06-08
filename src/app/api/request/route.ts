@@ -83,3 +83,42 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ status: false, error: "Internal Server Error" });
   }
 }
+export async function POST(req: NextRequest) {
+  await connect();
+
+  try {
+    const { requestId, status } = await req.json();
+
+    if (!requestId || !status) {
+      return NextResponse.json({
+        success: false,
+        message: "Missing requestId or status",
+      });
+    }
+
+    const updated = await Request.findByIdAndUpdate(
+      requestId,
+      { status },
+      { new: true }
+    );
+
+    if (!updated) {
+      return NextResponse.json({
+        success: false,
+        message: "Request not found",
+      });
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: "Status updated successfully",
+      data: updated,
+    });
+  } catch (error) {
+    console.error("Error updating request status:", error);
+    return NextResponse.json({
+      success: false,
+      message: "Server error",
+    });
+  }
+}

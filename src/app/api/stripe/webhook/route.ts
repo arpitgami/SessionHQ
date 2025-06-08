@@ -25,7 +25,6 @@ export async function POST(req: NextRequest) {
     // console.log("type:", type);
 
     if (type == "checkout.session.completed") {
-
       const session = event.data.object as Stripe.Checkout.Session;
       const paymentIntentId = session.payment_intent;
       const expertName = session.metadata?.expertName;
@@ -34,25 +33,50 @@ export async function POST(req: NextRequest) {
       const expertID = session.metadata?.expertID;
       const userID = session.metadata?.clientID;
       const slot = session.metadata?.slot;
-      const slotISO = JSON.parse(slot!);             // removes the extra quotes
+      const slotISO = JSON.parse(slot!); // removes the extra quotes
       const slotDate = new Date(slotISO);
-
 
       //push the request in the backend
       if (sessionName == "Reservation Fee Payement") {
         // console.log("metadata from webhook : ", session.metadata);
         await connect();
-        const newRequest = await new Request({ expertID, expertName, userID, slot: slotDate, paymentIntentID: paymentIntentId });
+        const newRequest = await new Request({
+          expertID,
+          expertName,
+          userID,
+          slot: slotDate,
+          paymentIntentID: paymentIntentId,
+        });
         await newRequest.save();
-
-      }// Create the meeting
+      } // Create the meeting
       else if (sessionName == "Final Payment") {
         //meeting schedule
         await connect();
-        const newMeeting = await new Meeting({ expertID, userID, slot: slotDate });
+        const requestID = session.metadata?.requestID;
+
+        const updatedRequest = await Request.findByIdAndUpdate(
+          requestID,
+          { $set: { isPayment: true } },
+          { new: true }
+        );
+
+        if (!updatedRequest) {
+          console.warn("⚠️ No matching request found for Final Payment update");
+        }
+        const roomID = uuidv4();
+        const newMeeting = await new Meeting({
+          expertID,
+          userID,
+          slot: slotDate,
+          roomID,
+        });
+        if (!updatedRequest) {
+          console.warn(" No matching request found for Final Payment update");
+        } else {
+          console.log(" Request updated:", updatedRequest);
+        }
         await newMeeting.save();
       }
-
     }
 
     return NextResponse.json({ status: true, event: event });

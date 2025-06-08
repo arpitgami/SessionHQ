@@ -2,13 +2,21 @@
 
 import { Bell } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
+import { loadStripe } from "@stripe/stripe-js";
+
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
+);
 
 type Request = {
   _id: string;
+  expertID: string;
   expertName: string;
+  userID: string;
   slot: string;
-  status: "pending" | "accepted" | "rejected" | "declined" | "expired";
+  status: string;
   isPayment: boolean;
+  paymentIntentID: string;
 };
 
 export default function NotificationDropdown() {
@@ -18,9 +26,11 @@ export default function NotificationDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
   useEffect(() => {
     console.log("NotificationDropdown mounted");
   }, []);
+
   const fetchRequests = async () => {
     setLoading(true);
     try {
@@ -48,7 +58,7 @@ export default function NotificationDropdown() {
     }
   };
 
-  // Auto-close dropdown on outside click
+  // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -68,14 +78,13 @@ export default function NotificationDropdown() {
     };
   }, [isOpen]);
 
-  // Auto refresh every 60 seconds when dropdown is open
+  // Auto refresh every 60 seconds when open
   useEffect(() => {
     if (isOpen) {
       intervalRef.current = setInterval(() => {
         fetchRequests();
-      }, 60000); // every 60 seconds
-    } //if it is not open and interval has been done then reset it to default if not there
-    else if (intervalRef.current) {
+      }, 60000);
+    } else if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
@@ -101,7 +110,7 @@ export default function NotificationDropdown() {
         return "bg-purple-500 text-white"; // pending
     }
   };
-  //format iso to indian standard time
+
   const formatSlot = (slot: string) => {
     const date = new Date(slot);
     return date.toLocaleString("en-IN", {
@@ -109,6 +118,41 @@ export default function NotificationDropdown() {
       timeStyle: "short",
     });
   };
+
+  async function handleMakePayment(request: Request) {
+    try {
+      const res = await fetch("/api/user/makepayment/sessionfee", {
+        method: "POST",
+        body: JSON.stringify({
+          expertID: request.expertID,
+          userID: request.userID,
+          slot: request.slot,
+          requestID: request._id,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await res.json();
+
+      if (!data.status) {
+        console.error("Error while getting session url:", data.error);
+        return;
+      }
+
+      const stripe = await stripePromise;
+      const result = await stripe?.redirectToCheckout({
+        sessionId: data.sessionID,
+      });
+
+      if (result?.error) {
+        console.error("Stripe checkout redirect error:", result.error.message);
+      }
+    } catch (error) {
+      console.error("Error during Stripe checkout:", error);
+    }
+  }
 
   return (
     <div className="relative" ref={dropdownRef}>
@@ -158,11 +202,15 @@ export default function NotificationDropdown() {
                     {r.expertName}
                   </span>
                   <span
-                    className={`capitalize px-3 py-1 text-xs font-semibold rounded-full ${getStatusColor(
-                      r.status
-                    )}`}
+                    className={`capitalize px-3 py-1 text-xs font-semibold rounded-full ${
+                      r.status === "accepted" && r.isPayment
+                        ? "bg-blue-500 text-white"
+                        : getStatusColor(r.status)
+                    }`}
                   >
-                    {r.status}
+                    {r.status === "accepted" && r.isPayment
+                      ? "Confirmed"
+                      : r.status}
                   </span>
                 </div>
 
@@ -171,26 +219,30 @@ export default function NotificationDropdown() {
                 {r.status === "accepted" && !r.isPayment && (
                   <div className="mt-2">
                     <p className="text-xs text-green-800 font-medium mb-1">
-                      💰 Waiting for payment
+                      Waiting for payment
                     </p>
                     <button
-                      onClick={() =>
-                        console.log(`Make payment for request ${r._id}`)
-                      }
+                      onClick={() => handleMakePayment(r)}
                       className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold text-sm py-2 px-4 rounded-lg transition"
                     >
                       Make Payment
                     </button>
                   </div>
                 )}
+                {r.status === "accepted" && r.isPayment && (
+                  <p className="text-xs text-blue-600 mt-1 font-medium">
+                    Your meeting has been confirmed
+                  </p>
+                )}
+
                 {r.status === "pending" && (
                   <p className="text-xs text-purple-700 mt-1 font-medium">
-                    ⏳ Waiting for expert to respond
+                    Waiting for expert to respond
                   </p>
                 )}
                 {r.status === "declined" && (
                   <p className="text-xs text-yellow-700 mt-1 font-medium">
-                    ⚠️ Expert did not respond in time. Refund initiated.
+                    Expert did not respond in time. Refund initiated.
                   </p>
                 )}
                 {r.status === "rejected" && (
@@ -199,9 +251,14 @@ export default function NotificationDropdown() {
                   </p>
                 )}
                 {r.status === "expired" && (
-                  <p className="text-xs text-gray-500 mt-1 font-medium">
-                    ⌛ Slot has expired. No Refund
-                  </p>
+                  <>
+                    <p className="text-xs text-gray-500 mt-1 font-medium">
+                      Slot has expired. No Refund
+                    </p>
+                    <p className="text-xs text-gray-400 mt-1 font-medium italic">
+                      Time expires, user did not make the full payment
+                    </p>
+                  </>
                 )}
               </div>
             ))
