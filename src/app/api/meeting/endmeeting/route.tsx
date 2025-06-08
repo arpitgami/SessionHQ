@@ -1,4 +1,3 @@
-// /app/api/meeting/end/route.ts
 import { NextResponse } from "next/server";
 import { Meeting } from "@/models/Meeting";
 import connect from "@/dbconfig/dbconfig";

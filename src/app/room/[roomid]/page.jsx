@@ -18,6 +18,7 @@ const page = () => {
     const { peer, peerid } = usePeer();
     const { stream, setStream } = useMediaStream();
     const { user, isLoaded } = useUser();
+    const router = useRouter();
 
     const [incomingStream, setIncomingStream] = useState(null);
     const [incomingID, setIncomingID] = useState(null);
@@ -25,16 +26,16 @@ const page = () => {
     const [isCall, setIsCall] = useState(null);
     const [isOtherUserSharingScreen, setIsOtherUserSharingScreen] = useState(false);
     const [name, setName] = useState(null); //username 
-    const [sessionData, setSessionData] = useState(null);
+    const [sessionData, setSessionData] = useState(null);//meeting data
+    const [isChecking, setIsChecking] = useState(true);//checking user
+    const [remainingTime, setRemainingTime] = useState(null);//for timer
 
-    const router = useRouter();
 
-    async function endMeeting(id) {
-        console.log("sessionDataid:", id)
+    async function endMeeting() {
         const res = await fetch("/api/meeting/endmeeting", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ meetingID: id }),
+            body: JSON.stringify({ meetingID: roomid }),
         });
 
         const result = await res.json();
@@ -47,20 +48,37 @@ const page = () => {
 
         router.push("/meetings");
     }
-    //remaining time
-    const [remainingTime, setRemainingTime] = useState(null);
 
+    //check if user is allowed in the room
     useEffect(() => {
-        const newsessionData = localStorage.getItem("sessionData");
-        if (!newsessionData) return;
-        const parsed = JSON.parse(newsessionData);
-        setSessionData(parsed); //meeting data 
-        // console.log("sessiondata value mounted:", parsed);
-        const slot = parsed.slot ? parsed.slot : null;
+        if (!roomid) return;
+        (async function checkuser() {
+            try {
+                const res = await fetch(`/api/meeting/allowuser?id=${roomid}`);
+                const data = await res.json();
+
+                console.log("meeting from room page:", data);
+                if (!data.status) {
+                    alert(data.message);
+                    router.push("/");
+                }
+                setSessionData(data.meetingData);
+                setIsChecking(false);
+            } catch (error) {
+                console.log("error in checking meeting:", error);
+                alert(error);
+                router.push("/");
+            }
+        })()
+    }, [roomid])
+
+    //timer
+    useEffect(() => {
+        if (isChecking || !sessionData) return;
+        const slot = sessionData.slot;
+        if (!slot) return;
 
         const interval = setInterval(() => {
-            if (!slot) return;
-
             const now = new Date();
             const endTime = new Date(new Date(slot).getTime() + 60 * 60 * 1000); // slot + 1hr
             const diff = endTime.getTime() - now.getTime();
@@ -68,7 +86,7 @@ const page = () => {
             if (diff <= 0) {
                 setRemainingTime("00:00:00");
                 clearInterval(interval);
-                endMeeting(parsed._id);
+                endMeeting();
                 return;
             }
 
@@ -79,21 +97,22 @@ const page = () => {
             setRemainingTime(`${hours}:${minutes}:${seconds}`);
         }, 1000);
 
+
         return () => {
             clearInterval(interval);
-            // localStorage.removeItem("sessionData");
         }
-    }, []);
+    }, [isChecking, sessionData]);
 
 
     useEffect(() => {
-        if (!socket || !roomid || !peerid) return;
+        if (!socket || !roomid || !peerid || isChecking) return;
         socket.emit("join-room", roomid, peerid);
 
-    }, [socket, roomid, peerid])
+    }, [isChecking, socket, roomid, peerid])
 
+    //username
     useEffect(() => {
-        if (!user || !isLoaded) return;
+        if (!user || !isLoaded || isChecking) return;
 
 
         if (user.firstName) return setName(user.firstName);
@@ -107,10 +126,11 @@ const page = () => {
         if (email) return setName(email.split('@')[0]);
 
         setName('User'); // fallback in worst case
-    }, [user, isLoaded])
+    }, [user, isLoaded, isChecking])
 
+    //listeners
     useEffect(() => {
-        if (!socket || !peer || !stream || !peerid) return;
+        if (!socket || !peer || !stream || !peerid || isChecking) return;
 
         // User is in the room another user joins, I will initiate the call.
         socket.on("new-user-joined", (peerid) => {
@@ -140,11 +160,17 @@ const page = () => {
             console.log("screen is shared by other user", status);
             setIsOtherUserSharingScreen(status);
         })
-    }, [socket, peer, stream, peerid])
+        socket.on("meeting-ended", () => {
+            setTimeout(() => {
+                alert("Other user ended the meeting...")
+                router.push('/');
+            }, 1000)
+        })
+    }, [socket, peer, stream, peerid, isChecking])
 
     //accept the call
     useEffect(() => {
-        if (!peer || !stream) return;
+        if (!peer || !stream || isChecking) return;
 
         peer.on('call', (call) => {
             setIsCall(call);
@@ -161,12 +187,12 @@ const page = () => {
             }) // incoming stream
         })
 
-    }, [peer, stream])
+    }, [peer, stream, isChecking])
 
 
     //let other user know screen is been shared for disabling ui elements
     useEffect(() => {
-        if (!socket || !roomid) return;
+        if (!socket || !roomid || isChecking) return;
 
         if (isScreenSharing) {
             socket.emit("screen-sharing-status", roomid, true);
@@ -174,42 +200,45 @@ const page = () => {
         else {
             socket.emit("screen-sharing-status", roomid, false);
         }
-    }, [isScreenSharing]);
+    }, [isScreenSharing, isChecking]);
 
 
 
-
+    // if (isChecking) return
 
     return (
-        <div className="flex h-screen w-screen items-center justify-evenly ">
-            {remainingTime && (
-                <div className="absolute top-2 left-10 -translate-x-1/2 bg-base-100 text-red-600 px-2 py-1 rounded-full text-sm shadow-sm z-50">
-                    {remainingTime}
-                </div>
-            )}
+        isChecking ? <div className="flex items-center justify-center h-screen w-screen text-md">Authorizing User....</div> :
 
-            <div className="relative flex flex-col h-screen items-center justify-evenly ">
-                <div className="flex gap-4 ">
-                    {stream && <StreamPlayer stream={stream} muted={true} userID={peerid} playing={true}
-                        isScreenSharing={isOtherUserSharingScreen || isScreenSharing} isLocalUser={isScreenSharing} />}
-                    {incomingStream && <StreamPlayer stream={incomingStream} muted={true} userID={incomingID} playing={true}
 
-                        isScreenSharing={isOtherUserSharingScreen || isScreenSharing} isLocalUser={!isScreenSharing} />}
+            <div className="flex h-screen w-screen items-center justify-evenly ">
+                {remainingTime && (
+                    <div className="absolute top-2 left-10 -translate-x-1/2 bg-base-100 text-red-600 px-2 py-1 rounded-full text-sm shadow-sm z-50">
+                        {remainingTime}
+                    </div>
+                )}
+
+                <div className="relative flex flex-col h-screen items-center justify-evenly ">
+                    <div className="flex gap-4 ">
+                        {stream && <StreamPlayer stream={stream} muted={true} userID={peerid} playing={true}
+                            isScreenSharing={isOtherUserSharingScreen || isScreenSharing} isLocalUser={isScreenSharing} />}
+                        {incomingStream && <StreamPlayer stream={incomingStream} muted={true} userID={incomingID} playing={true}
+
+                            isScreenSharing={isOtherUserSharingScreen || isScreenSharing} isLocalUser={!isScreenSharing} />}
+                    </div>
+                    <div className='flex flex-row items-center '>
+                        {stream && <ControlPannel className="absolute bottom-1 left-1/2 -translate-x-1/2"
+                            isScreenSharing={isScreenSharing}
+                            setIsScreenSharing={setIsScreenSharing} stream={stream} setStream={setStream}
+                            call={isCall}
+                            isOtherUserSharingScreen={isOtherUserSharingScreen}
+                        />}
+                        {sessionData && sessionData._id && <EndCallButton meetingID={sessionData._id} roomid={roomid} />}
+                    </div>
                 </div>
-                <div className='flex flex-row items-center '>
-                    {stream && <ControlPannel className="absolute bottom-1 left-1/2 -translate-x-1/2"
-                        isScreenSharing={isScreenSharing}
-                        setIsScreenSharing={setIsScreenSharing} stream={stream} setStream={setStream}
-                        call={isCall}
-                        isOtherUserSharingScreen={isOtherUserSharingScreen}
-                    />}
-                    {sessionData && sessionData._id && <EndCallButton meetingID={sessionData._id} />}
-                </div>
+                {name && <ChatSection currentUser={name} roomid={roomid} />}
+
+
             </div>
-            {name && <ChatSection currentUser={name} roomid={roomid} />}
-
-
-        </div>
     )
 }
 

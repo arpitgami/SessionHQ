@@ -36,23 +36,23 @@ export default function MeetingPage() {
 
     }, [user, isLoaded])
 
-    if (!isLoaded) return <div>Loading....</div>
+    if (!isLoaded) return <div className="flex flex-col h-screen w-screen items-center justify-center">Loading....</div>
 
     return (
 
 
 
         <div className="min-h-screen bg-base-100 p-6">
-            <h1 className="text-3xl font-bold mb-6 text-center">Your Upcoming Sessions</h1>
-            {meetings && meetings!.length > 0 ? (
+            <h1 className="text-3xl font-bold mb-6 text-center">Your Upcoming Meetings</h1>
+            {meetings && meetings!.length > 0 && (
                 meetings!.map((m) => (
                     <MeetingCard
                         key={m._id}
                         meeting={m}
-                        user={user}
                     />
                 ))
-            ) : (
+            )}
+            {meetings && meetings.length === 0 && (
                 <p className="text-center text-gray-500">No meetings scheduled.</p>
             )}
         </div>

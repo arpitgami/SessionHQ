@@ -27,6 +27,7 @@ export async function GET(req: NextRequest) {
                 upcomingMeetings.push(meeting);
             } else {
                 // Delete expired/old meeting
+                console.log("meeting deleted ", meeting);
                 await Meeting.findByIdAndDelete(meeting._id);
             }
         }

@@ -94,18 +94,16 @@ export default function MeetingCard({ meeting }: any) {
                 <div>
                     <h2 className="text-xl font-bold">{expert?.fullName}</h2>
                     <p className="text-gray-600">{expert?.headline}</p>
-                    <p className="text-sm mt-1 text-gray-500">🕒 {format(new Date(meeting.slot), "PPPp")}</p>
+                    <p className="text-sm mt-1 text-gray-500">{format(new Date(meeting.slot), "PPPp")}</p>
                     <p className="text-sm text-red-500">{remainingTime}</p>
                 </div>
 
                 <button
                     onClick={() => {
-                        localStorage.setItem("sessionData", JSON.stringify(meeting));
-                        router.push(`/room/${meeting.roomID}`)
+                        router.push(`/room/${meeting._id}`)
                     }
                     }
-                    // disabled={!canJoin}
-                    className={`btn mt-4 px-4 py-2 rounded-lg order ${canJoin ? "btn-primary" : "btn-   "
+                    className={`btn mt-4 px-4 py-2 rounded-lg order ${canJoin ? "btn-primary" : "btn-disabled"
                         }`}
                 >
                     Join Now

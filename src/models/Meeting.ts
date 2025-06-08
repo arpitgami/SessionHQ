@@ -14,10 +14,6 @@ const MeetingSchema = new mongoose.Schema(
             type: Date,
             required: true
         },
-        roomID: {
-            type: String,
-            required: true
-        }
     }
 );
 

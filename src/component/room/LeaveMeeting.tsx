@@ -2,10 +2,14 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { MdCallEnd } from "react-icons/md";
+import { useSocket } from '@/context/socket';
 
-export default function EndCallButton({ meetingID }: { meetingID: string }) {
+
+export default function EndCallButton({ meetingID, roomid }: { meetingID: string; roomid: string }) {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
+    const { socket }: any = useSocket();
+
 
     async function handleLeave() {
         const confirmed = window.confirm(
@@ -27,8 +31,8 @@ export default function EndCallButton({ meetingID }: { meetingID: string }) {
                 console.error(result.error);
                 return;
             }
-
-            router.push("/meetings");
+            socket.emit("user-ended-meeting", roomid);
+            router.push("/");
         } catch (err) {
             alert("Failed to end meeting. Try again.");
         } finally {

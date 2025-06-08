@@ -48,6 +48,9 @@ app.prepare().then(() => {
             socket.to(roomid).emit("user-sharing-screen-status", status);
 
         })
+        socket.on("user-ended-meeting", (roomid) => {
+            socket.to(roomid).emit("meeting-ended");
+        })
 
     });
 
