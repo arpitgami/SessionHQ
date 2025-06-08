@@ -83,12 +83,12 @@ export default function ExpertAvailabilityCalendar() {
         console.error("Error loading availability", err);
       }
     };
-//  So, the flow is:
-// You load previously saved availability (which may include times in the past).
+    //  So, the flow is:
+    // You load previously saved availability (which may include times in the past).
 
-// During rendering, isPast disables those slots, no matter what the saved data says.
+    // During rendering, isPast disables those slots, no matter what the saved data says.
 
-// The slot will appear gray (past), not green or blue, due to your class logic.
+    // The slot will appear gray (past), not green or blue, due to your class logic.
     fetchAvailability();
   }, [expertId]);
 
