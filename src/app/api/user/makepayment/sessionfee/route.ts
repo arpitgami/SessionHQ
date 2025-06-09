@@ -7,13 +7,14 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { expertID, userID, slot, requestID  } = body;
-    console.log(body);
+    const { expertID, userID, slot, requestID } = body;
+    console.log("Body of session checkout : ", body);
 
     await connect();
 
     const expert = await ExpertApplication.findOne({ clerkID: expertID });
-    const slotTimestamp = new Date(`${slot.date}T${slot.time}:00+05:30`); // saving in UTC
+    const slotTimestamp = new Date(slot);
+    console.log("slot at final fee session req:", slot, slotTimestamp);
 
     if (!expert)
       return NextResponse.json({ error: "Expert not found" }, { status: 404 });
@@ -31,7 +32,7 @@ export async function POST(req: NextRequest) {
               description: `${expert.headline} · ${expert.expertise.join(
                 ", "
               )}`,
-              images: [expert.imageURL], // optional but powerful
+              images: [expert.imageURL],
             },
 
             unit_amount: Math.round(price * 100),
@@ -46,7 +47,7 @@ export async function POST(req: NextRequest) {
         sessionName: "Final Payment",
         expertID: expert.clerkID,
         clientID: userID,
-        slot: JSON.stringify(slotTimestamp),
+        slot: JSON.stringify(slot),
         requestID,
       },
     });

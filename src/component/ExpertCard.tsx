@@ -15,7 +15,7 @@ interface Expert {
 
 export const ExpertCard = ({ expert }: { expert: Expert }) => {
   return (
-    <div className="bg-white rounded-xl shadow p-4 flex flex-col justify-between h-full transition hover:shadow-lg">
+    <div className="bg-base-100 rounded-xl shadow p-4 flex flex-col justify-between h-full transition hover:shadow-lg">
       {/* Top: Avatar + Name */}
       <div className="flex items-center gap-4">
         <Image
@@ -32,7 +32,7 @@ export const ExpertCard = ({ expert }: { expert: Expert }) => {
           <p className="text-sm text-gray-500">{expert.Headline}</p>
         </div>
         <div className="text-right">
-          <p className="text-green-600 font-bold text">
+          <p className="text-neutral font-bold text">
             {expert.hourlyRate} $/hr
           </p>
         </div>
@@ -55,13 +55,13 @@ export const ExpertCard = ({ expert }: { expert: Expert }) => {
 
       {/* Languages (compact inline) */}
       <div className="mt-2 text-xs text-gray-500">
-        🗣️ {expert.languages.join(", ")}
+        {expert.languages.join(", ")}
       </div>
 
       {/* View Profile Button */}
       <Link
         href={`/expert/${expert.clerkID}`}
-        className="mt-4 inline-block w-full text-center bg-black text-white py-2 text-sm rounded-lg hover:bg-black transition"
+        className="mt-4 inline-block w-full text-center bg-primary text-white py-2 text-sm rounded-lg hover:bg-black transition"
       >
         View Profile
       </Link>

@@ -25,20 +25,22 @@ export async function POST(req: NextRequest) {
     // console.log("type:", type);
 
     if (type == "checkout.session.completed") {
+
       const session = event.data.object as Stripe.Checkout.Session;
       const paymentIntentId = session.payment_intent;
+      // console.log("session metdata:", session.metadata);
       const expertName = session.metadata?.expertName;
-      // console.log("paymentIntentId:", paymentIntentId);
       const sessionName = session.metadata?.sessionName;
       const expertID = session.metadata?.expertID;
       const userID = session.metadata?.clientID;
       const slot = session.metadata?.slot;
       const slotISO = JSON.parse(slot!); // removes the extra quotes
       const slotDate = new Date(slotISO);
+      console.log("Dateee:", slotDate, slot);
 
       //push the request in the backend
       if (sessionName == "Reservation Fee Payement") {
-        // console.log("metadata from webhook : ", session.metadata);
+        console.log("metadata from webhook : ", session.metadata);
         await connect();
         const newRequest = await new Request({
           expertID,
@@ -61,14 +63,12 @@ export async function POST(req: NextRequest) {
         );
 
         if (!updatedRequest) {
-          console.warn("⚠️ No matching request found for Final Payment update");
+          console.warn("No matching request found for Final Payment update");
         }
-        const roomID = uuidv4();
         const newMeeting = await new Meeting({
           expertID,
           userID,
           slot: slotDate,
-          roomID,
         });
         if (!updatedRequest) {
           console.warn(" No matching request found for Final Payment update");

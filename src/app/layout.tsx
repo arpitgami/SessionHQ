@@ -19,13 +19,15 @@ export default function RootLayout({
     setIsMounted(true);
   }, []);
 
-  const hideNavbarRoutes = ["/login", "/signup"];
+  const hideNavbarRoutes = ["/login", "/signup", "/feedback"];
   const shouldHideNavbar =
     hideNavbarRoutes.includes(pathname) || pathname.startsWith("/room/");
 
   return (
     <ClerkProvider>
-      <html data-theme="lofi" lang="en">
+      <html
+        data-theme="lofi"
+        lang="en">
         <body>
           {/* Wait until after mount to render Navbar to avoid hydration mismatch */}
           {isMounted && !shouldHideNavbar && <Navigation />}

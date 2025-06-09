@@ -24,7 +24,7 @@ const AboutYou = ({ formData, setFormData, nextStep, prevStep, sessionLoaded, se
     return (
         <>
 
-            <form onSubmit={handleSubmit} className="modal-box max-w-xl space-y-6 bg-white p-6 ">
+            <form onSubmit={handleSubmit} className="modal-box max-w-xl max-h-[95%] space-y-6 bg-base-100 rounded-2xl p-6 ">
                 {sessionLoaded && (
                     <div className="flex flex-row text-sm">
                         <p>Previous session data loaded. </p>

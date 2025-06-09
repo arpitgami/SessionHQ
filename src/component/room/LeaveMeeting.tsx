@@ -32,7 +32,7 @@ export default function EndCallButton({ meetingID, roomid }: { meetingID: string
                 return;
             }
             socket.emit("user-ended-meeting", roomid);
-            router.push("/");
+            router.push("/feedback");
         } catch (err) {
             alert("Failed to end meeting. Try again.");
         } finally {

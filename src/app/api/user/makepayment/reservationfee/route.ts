@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
                         product_data: {
                             name: `Reservation Fee for 1-on-1 Session with ${expert.fullName}`,
                             description: `${expert.headline} · ${expert.expertise.join(", ")}`,
-                            images: [expert.imageURL], // optional but powerful
+                            images: [expert.imageURL],
                         },
 
                         unit_amount: 5 * 100,

@@ -67,7 +67,7 @@ export default function ExpertProfile() {
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch(`/api/user/saveUserSessionData?userid=${user?.id}`);
+        const res = await fetch(`/api/user/saveUserSessionData?userId=${user?.id}`);
         const data = await res.json();
 
         if (data.status && data.isFound) {
@@ -129,7 +129,7 @@ export default function ExpertProfile() {
           <div className="flex flex-col justify-between w-full md:w-2/3">
             <div>
               <h2 className="text-4xl font-extrabold mb-2 text-primary">{expert.fullName}</h2>
-              <p className="text-base text-gray-600 mb-1">{expert.headline}</p>
+              <p className="text-base text-secondary mb-1">{expert.headline}</p>
               <p className="text-base mb-4">{expert.bio}</p>
 
               {/* Expertise Pills */}

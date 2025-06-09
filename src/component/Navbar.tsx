@@ -36,7 +36,7 @@ export const Navigation = () => {
   const navLinks = isExpert ? expertNavLinks : clientNavLinks;
 
   return (
-    <nav className="bg-neutral border-b shadow-sm px-6 py-4">
+    <nav className="mb-8 my-4 mx-auto rounded-2xl w-[80%] bg-neutral border shadow-lg px-6 py-4">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo */}
         {isExpert ? (

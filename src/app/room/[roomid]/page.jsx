@@ -46,7 +46,7 @@ const page = () => {
 
         alert("Meeting ended...");
 
-        router.push("/meetings");
+        router.push("/feedback");
     }
 
     //check if user is allowed in the room
@@ -163,7 +163,7 @@ const page = () => {
         socket.on("meeting-ended", () => {
             setTimeout(() => {
                 alert("Other user ended the meeting...")
-                router.push('/');
+                router.push('/feedback');
             }, 1000)
         })
     }, [socket, peer, stream, peerid, isChecking])

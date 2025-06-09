@@ -180,7 +180,7 @@ export default function ExpertApplicationForm() {
       </div>
     </div>
   ) : (
-    <section className="min-h-[90vh] flex items-center justify-center px-6 py-12">
+    <section className="min-h-[80vh] flex items-center justify-center px-6">
       <div className="text-center max-w-4xl">
         <h1 className="text-5xl font-bold mb-6">
           Join a network of Vetted Experts!!

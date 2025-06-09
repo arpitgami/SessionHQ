@@ -30,13 +30,13 @@ export default function ExplorePage() {
     fetchExperts();
   }, []);
   return (
-    <main className="max-w-6xl mx-auto px-4 py-10 space-y-6 bg-white min-h-screen">
-      <h1 className="text-4xl font-bold text-gray-900 text-center">
-        Explore Experts
-      </h1>
-      <p className="text-xl text-gray-900 text-center">
+    <main className="max-w-6xl mx-auto px-4 bg-base-100 min-h-screen">
+      {/* <h1 className="text-xl font-bold text-gray-900 text-center">
+        LEARN FROM PROFESSIONALS FROM YOUR INDUSTRY!!
+      </h1> */}
+      {/* <p className="text-xl text-gray-900 text-center">
         Learn from professionals from your industry{" "}
-      </p>
+      </p> */}
       <br />
       <br />
       {loading ? (

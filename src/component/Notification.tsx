@@ -163,17 +163,16 @@ export default function NotificationDropdown() {
         <div className="indicator">
           <Bell className="h-5 w-5" />
           {requests.some((r) => r.status === "pending") && (
-            <span className="badge badge-xs badge-primary indicator-item" />
+            <span className="badge badge-xs badge-accent rounded-full indicator-item" />
           )}
         </div>
       </button>
 
       <div
-        className={`absolute right-0 mt-2 w-96 bg-slate-100 dark:bg-slate-800 shadow-xl rounded-xl max-h-[400px] overflow-y-auto border border-slate-300 dark:border-slate-700 z-50 transition-all duration-300 ease-in-out transform ${
-          isOpen
-            ? "opacity-100 scale-100 pointer-events-auto"
-            : "opacity-0 scale-95 pointer-events-none"
-        }`}
+        className={`absolute right-0 mt-2 w-96 bg-slate-100 dark:bg-slate-800 shadow-xl rounded-xl max-h-[400px] overflow-y-auto border border-slate-300 dark:border-slate-700 z-50 transition-all duration-300 ease-in-out transform ${isOpen
+          ? "opacity-100 scale-100 pointer-events-auto"
+          : "opacity-0 scale-95 pointer-events-none"
+          }`}
       >
         <div className="p-4">
           <h2 className="font-semibold text-lg mb-2">Session Requests</h2>
@@ -191,22 +190,20 @@ export default function NotificationDropdown() {
             requests.map((r) => (
               <div
                 key={r._id}
-                className={`rounded-lg p-4 mb-3 border shadow-sm hover:shadow-md transition ${
-                  r.status === "accepted"
-                    ? "bg-green-50 border-green-400"
-                    : "bg-white border-gray-200"
-                }`}
+                className={`rounded-lg p-4 mb-3 border shadow-sm hover:shadow-md transition ${r.status === "accepted"
+                  ? "bg-green-50 border-green-400"
+                  : "bg-white border-gray-200"
+                  }`}
               >
                 <div className="flex justify-between items-center mb-2">
                   <span className="font-semibold text-base text-gray-800">
                     {r.expertName}
                   </span>
                   <span
-                    className={`capitalize px-3 py-1 text-xs font-semibold rounded-full ${
-                      r.status === "accepted" && r.isPayment
-                        ? "bg-blue-500 text-white"
-                        : getStatusColor(r.status)
-                    }`}
+                    className={`capitalize px-3 py-1 text-xs font-semibold rounded-full ${r.status === "accepted" && r.isPayment
+                      ? "bg-blue-500 text-white"
+                      : getStatusColor(r.status)
+                      }`}
                   >
                     {r.status === "accepted" && r.isPayment
                       ? "Confirmed"
