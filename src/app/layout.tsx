@@ -19,7 +19,7 @@ export default function RootLayout({
     setIsMounted(true);
   }, []);
 
-  const hideNavbarRoutes = ["/login", "/signup", "/feedback"];
+  const hideNavbarRoutes = ["/login", "/signup", "/feedback", "/success", "/failed"];
   const shouldHideNavbar =
     hideNavbarRoutes.includes(pathname) || pathname.startsWith("/room/");
 

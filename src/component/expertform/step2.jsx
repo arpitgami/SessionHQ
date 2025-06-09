@@ -31,7 +31,7 @@ export default function Step2({ formData, updateField, setExpertImage, expertIma
             <MultiSelect
                 label="Languages Spoken"
                 required={false}
-                options={['English', 'Hindi', 'Spanish', 'French', 'Mandarin']}
+                options={['English', 'Hindi', 'Spanish', 'French']}
                 value={formData.languages || []}
                 onChange={(val) => updateField('languages', val)}
             />

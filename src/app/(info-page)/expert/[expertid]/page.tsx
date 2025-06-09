@@ -90,7 +90,14 @@ export default function ExpertProfile() {
 
 
 
-  if (!expert) return <div>Loading</div>
+  if (!expert) return <div className="flex flex-col h-screen w-screen items-center justify-center ">
+    <div className="flex w-[70%] h-3/6 flex-col gap-4">
+      <div className="skeleton h-32 w-full"></div>
+      <div className="skeleton h-4 w-28"></div>
+      <div className="skeleton h-4 w-full"></div>
+      <div className="skeleton h-4 w-full"></div>
+    </div>
+  </div>
 
   return (
     <>
@@ -108,8 +115,8 @@ export default function ExpertProfile() {
 
       </div>
 
-      <div className="min-h-screen flex items-start justify-center bg-base-200 px-4 py-15">
-        <div className="max-w-6xl w-full p-6 bg-base-100 rounded-2xl shadow-xl flex flex-col items-center md:flex-row gap-6">
+      <div className="min-h-[80%] flex items-start justify-center bg-base-100 px-4 py-7">
+        <div className="max-w-6xl w-full p-6 bg-base-100 rounded-2xl shadow-lg flex flex-col items-center md:flex-row gap-6">
 
           {/* Left: Profile Image */}
           <div className="w-full md:w-1/3 flex flex-col items-center">

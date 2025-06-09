@@ -1,6 +1,30 @@
 'use client';
 import { FormField, MultiSelect } from './forminputs';
 
+const Expertize = [
+    'Startup Ideation',
+    'Product-Market Fit',
+    'Fundraising & Pitching',
+    'Go-To-Market Strategy',
+    'Growth Hacking',
+    'Business Model Design',
+    'Startup Legal & Compliance',
+    'Financial Modeling',
+    'Investor Relations',
+    'MVP Development',
+    'Brand Building',
+    'User Acquisition',
+    'B2B Sales Strategy',
+    'D2C Strategy',
+    'Monetization Strategy',
+    'Tech Stack Selection',
+    'Team Building & Hiring',
+    'Startup Marketing',
+    'Pitch Deck Review',
+    'Lean Startup Methodology'
+]
+
+
 export default function Step1({ formData, updateField }) {
     return (
         <div className="space-y-4">
@@ -58,7 +82,7 @@ export default function Step1({ formData, updateField }) {
             <MultiSelect
                 label="Areas of Expertise"
                 required
-                options={['Web Development', 'UI/UX', 'AI/ML', 'Marketing', 'DevOps']}
+                options={Expertize}
                 value={formData.expertise || []}
                 onChange={(val) => updateField('expertise', val)}
             />

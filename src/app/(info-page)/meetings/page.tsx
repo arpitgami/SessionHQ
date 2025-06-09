@@ -43,7 +43,7 @@ export default function MeetingPage() {
 
 
         <div className="min-h-screen bg-base-100 p-6">
-            <h1 className="text-3xl font-bold mb-6 text-center">Your Upcoming Meetings</h1>
+            {/* <h1 className="text-3xl font-bold mb-6 text-center">Your Upcoming Meetings</h1> */}
             {meetings && meetings!.length > 0 && (
                 meetings!.map((m) => (
                     <MeetingCard

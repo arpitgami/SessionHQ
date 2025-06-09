@@ -61,7 +61,7 @@ export const ExpertCard = ({ expert }: { expert: Expert }) => {
       {/* View Profile Button */}
       <Link
         href={`/expert/${expert.clerkID}`}
-        className="mt-4 inline-block w-full text-center bg-primary text-white py-2 text-sm rounded-lg hover:bg-black transition"
+        className="mt-4 inline-block w-full text-center bg-primary text-white py-2 text-sm rounded-lg hover:bg-secondary transition"
       >
         View Profile
       </Link>

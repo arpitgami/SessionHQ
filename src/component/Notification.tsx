@@ -153,7 +153,6 @@ export default function NotificationDropdown() {
       console.error("Error during Stripe checkout:", error);
     }
   }
-
   return (
     <div className="relative" ref={dropdownRef}>
       <button
@@ -169,21 +168,23 @@ export default function NotificationDropdown() {
       </button>
 
       <div
-        className={`absolute right-0 mt-2 w-96 bg-slate-100 dark:bg-slate-800 shadow-xl rounded-xl max-h-[400px] overflow-y-auto border border-slate-300 dark:border-slate-700 z-50 transition-all duration-300 ease-in-out transform ${isOpen
+        className={`absolute right-0 mt-2 w-96 bg-base-100 shadow-xl rounded-xl max-h-[400px] overflow-y-auto border border-neutral  z-50 transition-all duration-300 ease-in-out transform  ${isOpen
           ? "opacity-100 scale-100 pointer-events-auto"
           : "opacity-0 scale-95 pointer-events-none"
           }`}
       >
         <div className="p-4">
-          <h2 className="font-semibold text-lg mb-2">Session Requests</h2>
+          <h2 className="font-semibold text-lg mb-2 text-base-content">
+            Session Requests
+          </h2>
 
           {loading ? (
             <div className="flex items-center justify-center py-8">
-              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
-              <span className="ml-2 text-sm text-gray-500">Loading...</span>
+              <span className="bg-secondary loading loading-spinner loading-xs"></span>
+              <span className="ml-2 text-sm text-base-content">Loading...</span>
             </div>
           ) : requests.length === 0 ? (
-            <p className="text-gray-500 text-sm text-center py-8">
+            <p className="text-base-content text-sm text-center py-8">
               No requests available.
             </p>
           ) : (
@@ -191,17 +192,17 @@ export default function NotificationDropdown() {
               <div
                 key={r._id}
                 className={`rounded-lg p-4 mb-3 border shadow-sm hover:shadow-md transition ${r.status === "accepted"
-                  ? "bg-green-50 border-green-400"
-                  : "bg-white border-gray-200"
+                  ? "bg-success/10 border-success"
+                  : "bg-base-200 border-base-300"
                   }`}
               >
                 <div className="flex justify-between items-center mb-2">
-                  <span className="font-semibold text-base text-gray-800">
+                  <span className="font-semibold text-base text-base-content">
                     {r.expertName}
                   </span>
                   <span
                     className={`capitalize px-3 py-1 text-xs font-semibold rounded-full ${r.status === "accepted" && r.isPayment
-                      ? "bg-blue-500 text-white"
+                      ? "bg-info text-info-content"
                       : getStatusColor(r.status)
                       }`}
                   >
@@ -211,49 +212,51 @@ export default function NotificationDropdown() {
                   </span>
                 </div>
 
-                <p className="text-sm text-gray-600">{formatSlot(r.slot)}</p>
+                <p className="text-sm text-base-content/70">
+                  {formatSlot(r.slot)}
+                </p>
 
                 {r.status === "accepted" && !r.isPayment && (
                   <div className="mt-2">
-                    <p className="text-xs text-green-800 font-medium mb-1">
+                    <p className="text-xs text-success-content font-medium mb-1">
                       Waiting for payment
                     </p>
                     <button
                       onClick={() => handleMakePayment(r)}
-                      className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold text-sm py-2 px-4 rounded-lg transition"
+                      className="w-full bg-success hover:bg-success-content text-success-content hover:text-base-100 font-semibold text-sm py-2 px-4 rounded-lg transition"
                     >
                       Make Payment
                     </button>
                   </div>
                 )}
+
                 {r.status === "accepted" && r.isPayment && (
-                  <p className="text-xs text-blue-600 mt-1 font-medium">
+                  <p className="text-xs text-info mt-1 font-medium">
                     Your meeting has been confirmed
                   </p>
                 )}
-
                 {r.status === "pending" && (
-                  <p className="text-xs text-purple-700 mt-1 font-medium">
+                  <p className="text-xs text-primary mt-1 font-medium">
                     Waiting for expert to respond
                   </p>
                 )}
                 {r.status === "declined" && (
-                  <p className="text-xs text-yellow-700 mt-1 font-medium">
+                  <p className="text-xs text-warning mt-1 font-medium">
                     Expert did not respond in time. Refund initiated.
                   </p>
                 )}
                 {r.status === "rejected" && (
-                  <p className="text-xs text-red-600 mt-1 font-medium">
+                  <p className="text-xs text-error mt-1 font-medium">
                     ❌ Expert rejected the request. Refund initiated
                   </p>
                 )}
                 {r.status === "expired" && (
                   <>
-                    <p className="text-xs text-gray-500 mt-1 font-medium">
+                    <p className="text-xs text-neutral mt-1 font-medium">
                       Slot has expired. No Refund
                     </p>
-                    <p className="text-xs text-gray-400 mt-1 font-medium italic">
-                      Time expires, user did not make the full payment
+                    <p className="text-xs text-neutral/70 mt-1 font-medium italic">
+                      Time expired, user did not make the full payment
                     </p>
                   </>
                 )}
@@ -264,4 +267,5 @@ export default function NotificationDropdown() {
       </div>
     </div>
   );
+
 }
