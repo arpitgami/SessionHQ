@@ -9,7 +9,14 @@ const RequestSchema = new mongoose.Schema(
     slot: { type: Date, required: true },
     status: {
       type: String,
-      enum: ["pending", "accepted", "rejected", "declined", "expired"],
+      enum: [
+        "pending",
+        "accepted",
+        "rejected",
+        "declined",
+        "expired",
+        "failed",
+      ],
       default: "pending",
     },
     isPayment: { type: Boolean, default: false },

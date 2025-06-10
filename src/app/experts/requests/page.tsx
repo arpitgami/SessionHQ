@@ -49,7 +49,32 @@ export default function ExpertRequests() {
       prevRequests.filter((req) => req._id !== requestId)
     );
   }
-
+  function handleStatusChange(
+    requestId: string,
+    newStatus: string,
+    slot: string,
+    expertID: string
+  ) {
+    if (newStatus === "accepted") {
+      setRequests((prevRequests) =>
+        prevRequests.map((req) => {
+          if (req._id === requestId) {
+            return { ...req, status: "accepted" };
+          }
+          // Decline all other requests for same expert & same slot
+          if (
+            req.expertID === expertID &&
+            req.slot === slot &&
+            req._id !== requestId &&
+            req.status === "pending"
+          ) {
+            return { ...req, status: "failed" };
+          }
+          return req;
+        })
+      );
+    }
+  }
   return (
     <div className="max-w-5xl mx-auto px-4 py-6">
       <h2 className="text-3xl font-extrabold text-center text-gray-800 mb-6 flex justify-center items-center gap-3">
@@ -58,7 +83,12 @@ export default function ExpertRequests() {
       </h2>
       {loading ? (
         <p className="text-center text-gray-500">Loading requests...</p>
-      ) : requests.filter((req) => req.status !== "rejected").length === 0 ? (
+      ) : requests.filter(
+          (req) =>
+            req.status !== "rejected" &&
+            req.status !== "declined" &&
+            req.status !== "failed"
+        ).length === 0 ? (
         <div className="text-center text-gray-600 bg-gray-100 rounded-lg p-8 shadow-inner">
           <p className="text-lg">No requests available right now.</p>
           <p className="text-sm mt-2 text-gray-500">
@@ -68,12 +98,18 @@ export default function ExpertRequests() {
       ) : (
         <div className="space-y-6">
           {requests
-            .filter((req) => req.status !== "rejected")
+            .filter(
+              (req) =>
+                req.status !== "rejected" &&
+                req.status !== "declined" &&
+                req.status !== "failed"
+            )
             .map((req) => (
               <UserRequestDetails
                 key={req._id}
                 request={req}
                 onRemove={handleRemoveRequest}
+                onStatusChange={handleStatusChange}
               />
             ))}
         </div>

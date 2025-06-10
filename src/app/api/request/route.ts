@@ -2,6 +2,7 @@ import connect from "@/dbconfig/dbconfig";
 import { initiateRefund } from "@/hooks/initiateRefund";
 import { Request } from "@/models/Request";
 import { NextRequest, NextResponse } from "next/server";
+import { ExpertAvailability } from "@/models/ExpertAvailability";
 import { currentUser } from "@clerk/nextjs/server";
 export async function GET(req: NextRequest) {
   try {
@@ -49,6 +50,34 @@ export async function GET(req: NextRequest) {
         if (updatedDiff >= 48 * 60 * 60 * 1000) {
           r.status = "expired";
           updated = true;
+          // UNLOCK THE SLOT
+          const expertAvailability = await ExpertAvailability.findOne({
+            expertId: r.expertID,
+          });
+
+          if (expertAvailability) {
+            const lockedSlots = expertAvailability.lockedSlots || new Map();
+
+            const IST_OFFSET = 5.5 * 60 * 60 * 1000;
+            const slotDateUTC = new Date(r.slot);
+            const slotDateIST = new Date(slotDateUTC.getTime() + IST_OFFSET);
+            const isoString = slotDateIST.toISOString();
+            const [dateStr, timeWithMs] = isoString.split("T");
+            const time = timeWithMs.slice(0, 5);
+
+            const updatedTimes = (lockedSlots.get(dateStr) || []).filter(
+              (t) => t !== time
+            );
+
+            if (updatedTimes.length > 0) {
+              lockedSlots.set(dateStr, updatedTimes);
+            } else {
+              lockedSlots.delete(dateStr);
+            }
+
+            expertAvailability.lockedSlots = lockedSlots;
+            await expertAvailability.save();
+          }
         }
       }
 
@@ -96,29 +125,61 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const updated = await Request.findByIdAndUpdate(
-      requestId,
-      { status },
-      { new: true }
-    );
-
-    if (!updated) {
+    const currentRequest = await Request.findById(requestId);
+    if (!currentRequest) {
       return NextResponse.json({
         success: false,
         message: "Request not found",
       });
     }
 
-    return NextResponse.json({
-      success: true,
-      message: "Status updated successfully",
-      data: updated,
-    });
-  } catch (error) {
-    console.error("Error updating request status:", error);
-    return NextResponse.json({
-      success: false,
-      message: "Server error",
-    });
+    currentRequest.status = status;
+    await currentRequest.save();
+
+    if (status === "accepted") {
+      // 1. Mark all other requests for the same expert and slot as "failed"
+      await Request.updateMany(
+        {
+          _id: { $ne: requestId },
+          expertID: currentRequest.expertID,
+          slot: currentRequest.slot,
+          status: "pending",
+        },
+        {
+          $set: { status: "failed" },
+        }
+      );
+
+      // 2. Lock the slot for the expert
+      const expertAvailability = await ExpertAvailability.findOne({
+        expertId: currentRequest.expertID,
+      });
+
+      if (expertAvailability) {
+        const lockedSlots = expertAvailability.lockedSlots || new Map();
+        const IST_OFFSET = 5.5 * 60 * 60 * 1000; // 5 hours 30 mins in ms
+        const slotDateUTC = new Date(currentRequest.slot);
+        const slotDateIST = new Date(slotDateUTC.getTime() + IST_OFFSET);
+        const isoString = slotDateIST.toISOString(); // ensures it's a string
+        const [dateStr, timeWithMs] = isoString.split("T");
+        const timeStr = timeWithMs.slice(0, 5);
+        const time = timeStr.slice(0, 5); // "08:00"
+
+        const existingTimes = lockedSlots.get(dateStr) || [];
+
+        if (!existingTimes.includes(time)) {
+          lockedSlots.set(dateStr, [...existingTimes, time]);
+        }
+
+        expertAvailability.lockedSlots = lockedSlots;
+        // console.log(expertAvailability);
+        await expertAvailability.save();
+      }
+    }
+
+    return NextResponse.json({ success: true, message: "Status updated" });
+  } catch (err) {
+    console.error("Error updating request status:", err);
+    return NextResponse.json({ success: false, message: "Server error" });
   }
 }

@@ -9,6 +9,7 @@ const Slot = ({ selectedSlot, setSelectedSlot, nextStep }) => {
   const [availability, setAvailability] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [lockedSlots, setLockedSlots] = useState({});
 
   useEffect(() => {
     const fetchAvailability = async () => {
@@ -19,7 +20,8 @@ const Slot = ({ selectedSlot, setSelectedSlot, nextStep }) => {
         const data = await res.json();
         if (!data.status) console.log("Failed to fetch availability");
 
-        setAvailability(data.availability);
+        setAvailability(data.availability || {});
+        setLockedSlots(data.lockedSlots || {});
       } catch (err) {
         setError(err.message);
       } finally {
@@ -95,6 +97,8 @@ const Slot = ({ selectedSlot, setSelectedSlot, nextStep }) => {
                           selectedSlot?.date === date &&
                           selectedSlot?.time === time;
 
+                        const isLocked = lockedSlots?.[date]?.includes(time);
+
                         const [hours, minutes] = time.split(":").map(Number);
                         const endHour = (hours + 1) % 24;
                         const endTime = `${endHour
@@ -106,12 +110,19 @@ const Slot = ({ selectedSlot, setSelectedSlot, nextStep }) => {
                         return (
                           <button
                             key={time}
-                            onClick={() => handleSlotClick(date, time)}
-                            className={`px-3 py-1 text-sm rounded-full border ${
-                              isSelected
-                                ? "bg-neutral text-white border-neutral"
-                                : "bg-white text-gray-700 border-gray-300 hover:bg-base-300"
-                            }`}
+                            onClick={() =>
+                              !isLocked && handleSlotClick(date, time)
+                            }
+                            disabled={isLocked}
+                            className={`px-3 py-1 text-sm rounded-full border transition 
+        ${
+          isLocked
+            ? "bg-gray-200 text-gray-400 border-gray-300 cursor-not-allowed"
+            : isSelected
+            ? "bg-neutral text-white border-neutral"
+            : "bg-white text-gray-700 border-gray-300 hover:bg-base-300"
+        }
+      `}
                           >
                             {time} - {endTime}
                           </button>

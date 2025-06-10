@@ -37,9 +37,19 @@ type SessionType = {
 type Props = {
   request: RequestType;
   onRemove?: (requestId: string) => void; // optional callback to remove rejected request
+  onStatusChange?: (
+    requestId: string,
+    newStatus: string,
+    slot: string,
+    expertID: string
+  ) => void;
 };
 
-export default function UserRequestDetails({ request, onRemove }: Props) {
+export default function UserRequestDetails({
+  request,
+  onRemove,
+  onStatusChange,
+}: Props) {
   const [user, setUser] = useState<UserType | null>(null);
   const [session, setSession] = useState<SessionType | null>(null);
 
@@ -81,9 +91,9 @@ export default function UserRequestDetails({ request, onRemove }: Props) {
   // API call to update status
   const updateStatus = async (newStatus: string) => {
     if (newStatus == "accepted")
-      alert("Are you you want to accept this request?");
+      alert("Are you sure you want to accept this request?");
     else if (newStatus == "rejected")
-      alert("Are you you want to reject this request?");
+      alert("Are you sure you want to reject this request?");
     try {
       const res = await fetch(`/api/request`, {
         method: "POST",
@@ -96,6 +106,15 @@ export default function UserRequestDetails({ request, onRemove }: Props) {
         setStatus(newStatus);
 
         // If rejected, remove the request from UI (if onRemove callback provided)
+        // Let parent know to update state
+        if (onStatusChange) {
+          onStatusChange(
+            request._id,
+            newStatus,
+            request.slot,
+            request.expertID
+          );
+        }
         if (newStatus === "rejected" && onRemove) {
           onRemove(request._id);
         }
@@ -262,7 +281,7 @@ export default function UserRequestDetails({ request, onRemove }: Props) {
             {/* slot is confirmed and payment received  */}
             {status === "accepted" && isPayment && (
               <div className="mt-4 p-4 rounded-md bg-green-100 text-green-800 border border-green-300 font-semibold">
-                 Slot confirmed! Payment received.
+                Slot confirmed! Payment received.
               </div>
             )}
             {/* slot expired adn user did not make the full payment  */}

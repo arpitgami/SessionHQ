@@ -6,16 +6,11 @@ import { ExpertAvailability } from "@/models/ExpertAvailability";
 export async function POST(req: NextRequest) {
   const { userId, redirectToSignIn } = await auth();
   if (!userId) return redirectToSignIn();
-  if (!userId) {
-    return NextResponse.json({
-      status: false,
-      error: "Unauthorized",
-    });
-  }
+
   try {
     await connect();
     const expertId = userId;
-    const { availability } = await req.json();
+    const { availability, lockedSlots } = await req.json();
 
     if (!availability || typeof availability !== "object") {
       return NextResponse.json({
@@ -23,16 +18,28 @@ export async function POST(req: NextRequest) {
         error: "Invalid availability data",
       });
     }
-    console.log(expertId, availability);
+
+    // Optional: validate lockedSlots too if you expect it always
+    if (lockedSlots && typeof lockedSlots !== "object") {
+      return NextResponse.json({
+        status: false,
+        error: "Invalid lockedSlots data",
+      });
+    }
+
     const updatedAvailability = await ExpertAvailability.findOneAndUpdate(
-      { expertId: expertId },
-      { availability },
+      { expertId },
+      {
+        availability,
+        ...(lockedSlots && { lockedSlots }), // only update if provided
+      },
       { upsert: true, new: true }
     );
 
     return NextResponse.json({
       status: true,
-      availability: updatedAvailability,
+      availability: updatedAvailability.availability,
+      lockedSlots: updatedAvailability.lockedSlots,
     });
   } catch (err) {
     console.error("POST /api/expert/availability error:", err);
@@ -42,6 +49,7 @@ export async function POST(req: NextRequest) {
     });
   }
 }
+
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const expertId = searchParams.get("expertId");
@@ -58,17 +66,17 @@ export async function GET(req: NextRequest) {
     const availabilityDoc = await ExpertAvailability.findOne({ expertId });
 
     if (!availabilityDoc) {
-      // You can choose to return an empty structure or null
       return NextResponse.json({
         status: true,
         availability: {},
+        lockedSlots: {},
       });
     }
 
-    //  Only return the inner availability map
     return NextResponse.json({
       status: true,
-      availability: availabilityDoc.availability,
+      availability: availabilityDoc.availability || {},
+      lockedSlots: availabilityDoc.lockedSlots || {},
     });
   } catch (err) {
     console.error("GET /api/expert/availability error:", err);

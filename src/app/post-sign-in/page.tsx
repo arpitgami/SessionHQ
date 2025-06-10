@@ -13,7 +13,7 @@ export default function PostSignInRedirect() {
 
     const role = user?.publicMetadata?.role;
     if (role === "expert") {
-      router.replace("/experts/calendar");
+      router.replace("/experts/upcomingmeetings");
     } else {
       router.replace("/");
     }
