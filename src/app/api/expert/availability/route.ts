@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import connect from "@/dbconfig/dbconfig";
 import { ExpertAvailability } from "@/models/ExpertAvailability";
+import { Request } from "@/models/Request";
+import { initiateRefund } from "@/hooks/initiateRefund";
 
 export async function POST(req: NextRequest) {
   const { userId, redirectToSignIn } = await auth();
@@ -26,6 +28,7 @@ export async function POST(req: NextRequest) {
         error: "Invalid lockedSlots data",
       });
     }
+    const previous = await ExpertAvailability.findOne({ expertId });
 
     const updatedAvailability = await ExpertAvailability.findOneAndUpdate(
       { expertId },
@@ -34,7 +37,50 @@ export async function POST(req: NextRequest) {
         ...(lockedSlots && { lockedSlots }), // only update if provided
       },
       { upsert: true, new: true }
-    );
+    )
+
+    console.log("expertid , availability and updatedAvailability", expertId, availability, updatedAvailability);
+
+    // Finding removed slots
+    const removedSlots = [];
+
+    if (previous) {
+      const oldAvailability = previous.availability || new Map();
+
+      for (const [date, oldSlots] of oldAvailability.entries()) {
+        const newSlots = availability[date] || []; // incoming data
+
+        const removed = oldSlots.filter((slot: string) => !newSlots.includes(slot));
+
+        if (removed.length > 0) {
+          removedSlots.push({ date, removed });
+        }
+      }
+    }
+    const now = new Date();
+
+    for (const { date, removed } of removedSlots) {
+      for (const time of removed) {
+        const fullSlot = new Date(`${date}T${time}:00`);
+
+        if (fullSlot > now) {
+
+          // Marking pending request of removed slot as cancelled.
+          console.log("slot changed", date, time);
+          const requestsToCancel = await Request.find({
+            expertID: expertId,
+            slot: fullSlot,
+            status: 'pending',
+          });
+
+          for (const req of requestsToCancel) {
+            req.status = 'cancelled';
+            await req.save();
+            await initiateRefund(req.paymentIntentID);
+          }
+        }
+      }
+    }
 
     return NextResponse.json({
       status: true,

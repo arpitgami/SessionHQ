@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
       if (sessionName == "Reservation Fee Payement") {
         console.log("metadata from webhook : ", session.metadata);
         await connect();
-        const newRequest = await new Request({
+        const newRequest = new Request({
           expertID,
           expertName,
           userID,

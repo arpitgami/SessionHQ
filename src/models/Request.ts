@@ -16,11 +16,12 @@ const RequestSchema = new mongoose.Schema(
         "declined",
         "expired",
         "failed",
+        "cancelled",
       ],
       default: "pending",
     },
     isPayment: { type: Boolean, default: false },
-    paymentIntentID: { type: String, required: true },
+    paymentIntentID: { type: String, required: true, unique: true },
   },
   { timestamps: true }
 );

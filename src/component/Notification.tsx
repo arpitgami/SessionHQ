@@ -271,6 +271,16 @@ export default function NotificationDropdown() {
                     </p>
                   </>
                 )}
+                {r.status === "cancelled" && (
+                  <>
+                    {/* <p className="text-xs text-neutral mt-1 font-medium">
+                      Slot has expired. No Refund
+                    </p> */}
+                    <p className="text-xs text-neutral/70 mt-1 font-medium ">
+                      Expert removed the slot, you can try different slot. Refund initated.
+                    </p>
+                  </>
+                )}
               </div>
             ))
           )}
