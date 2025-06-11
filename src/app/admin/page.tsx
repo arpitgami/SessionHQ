@@ -1,5 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 import ExpertCard from "@/component/Adminexpertcard";
 
 type Expert = {
@@ -21,28 +23,43 @@ type Expert = {
 };
 
 export default function AdminExpertsPage() {
+  const { user, isSignedIn, isLoaded } = useUser();
+  const router = useRouter();
+
   const [experts, setExperts] = useState<Expert[]>([]);
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [loadingPage, setLoadingPage] = useState(true);
 
-  // Fetch pending experts
+  // Redirect early if not admin
   useEffect(() => {
-    const fetchExperts = async () => {
-      try {
-        const res = await fetch("/api/admin/experts");
-        const data = await res.json();
-        setExperts(data.experts || []);
-      } catch (err) {
-        console.error("Error fetching experts:", err);
-      } finally {
-        setLoadingPage(false);
+    if (isLoaded) {
+      const role = user?.publicMetadata?.role;
+      if (!isSignedIn || role !== "admin") {
+        router.replace("/?toast=admin_only");
       }
-    };
-    fetchExperts();
-  }, []);
+    }
+  }, [isLoaded, isSignedIn, user, router]);
 
-  // Approve handler
-  const handleApprove = async (expertId: string, expertfullname: string) => {
+  // Fetch only if role is "admin"
+  useEffect(() => {
+    const role = user?.publicMetadata?.role;
+    if (isLoaded && isSignedIn && role === "admin") {
+      const fetchExperts = async () => {
+        try {
+          const res = await fetch("/api/admin/experts");
+          const data = await res.json();
+          setExperts(data.experts || []);
+        } catch (err) {
+          console.error("Error fetching experts:", err);
+        } finally {
+          setLoadingPage(false);
+        }
+      };
+      fetchExperts();
+    }
+  }, [isLoaded, isSignedIn, user]);
+
+  const handleApprove = async (expertId: string, expertFullName: string) => {
     setLoadingId(expertId);
     try {
       const res = await fetch("/api/admin/experts", {
@@ -54,7 +71,7 @@ export default function AdminExpertsPage() {
       });
       const data = await res.json();
       if (data.success) {
-        alert(`Expert ${expertfullname} has been approved.`);
+        alert(`Expert ${expertFullName} has been approved.`);
         setExperts((prev) => prev.filter((exp) => exp._id !== expertId));
       }
     } catch (err) {
@@ -63,6 +80,10 @@ export default function AdminExpertsPage() {
       setLoadingId(null);
     }
   };
+
+  if (!isLoaded || (isSignedIn && user?.publicMetadata?.role !== "admin")) {
+    return <p className="text-center py-10">Checking access...</p>;
+  }
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">
@@ -74,7 +95,6 @@ export default function AdminExpertsPage() {
         <p className="text-gray-500">No pending experts to approve.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {" "}
           {experts.map((expert) => (
             <ExpertCard
               key={expert._id}
@@ -82,7 +102,7 @@ export default function AdminExpertsPage() {
               onApprove={handleApprove}
               isLoading={loadingId === expert._id}
             />
-          ))}{" "}
+          ))}
         </div>
       )}
     </div>

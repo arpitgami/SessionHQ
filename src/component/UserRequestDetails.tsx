@@ -10,7 +10,6 @@ import {
 } from "react-icons/fa";
 import { HiMail } from "react-icons/hi";
 import type { RequestType } from "@/app/experts/requests/page";
-
 import { format, formatDistanceToNow, isPast } from "date-fns";
 
 type UserType = {
@@ -36,7 +35,7 @@ type SessionType = {
 
 type Props = {
   request: RequestType;
-  onRemove?: (requestId: string) => void; // optional callback to remove rejected request
+  onRemove?: (requestId: string) => void;
   onStatusChange?: (
     requestId: string,
     newStatus: string,
@@ -52,8 +51,6 @@ export default function UserRequestDetails({
 }: Props) {
   const [user, setUser] = useState<UserType | null>(null);
   const [session, setSession] = useState<SessionType | null>(null);
-
-  // Local states for status and payment to reflect UI changes instantly
   const [status, setStatus] = useState(request.status);
   const [isPayment, setIsPayment] = useState(request.isPayment || false);
 
@@ -88,11 +85,10 @@ export default function UserRequestDetails({
   const formattedDate = format(slotDate, "MMMM d, yyyy, h:mm aa");
   const relativeTime = formatDistanceToNow(slotDate, { addSuffix: true });
 
-  // API call to update status
   const updateStatus = async (newStatus: string) => {
-    if (newStatus == "accepted")
+    if (newStatus === "accepted")
       alert("Are you sure you want to accept this request?");
-    else if (newStatus == "rejected")
+    else if (newStatus === "rejected")
       alert("Are you sure you want to reject this request?");
     try {
       const res = await fetch(`/api/request`, {
@@ -104,9 +100,6 @@ export default function UserRequestDetails({
       const data = await res.json();
       if (data.success) {
         setStatus(newStatus);
-
-        // If rejected, remove the request from UI (if onRemove callback provided)
-        // Let parent know to update state
         if (onStatusChange) {
           onStatusChange(
             request._id,
@@ -128,17 +121,17 @@ export default function UserRequestDetails({
   };
 
   return (
-    <div>
-      <div className="bg-white mb-6 mx-6 pr-2 rounded-xl shadow-lg border border-gray-300 transition-transform duration-300 hover:shadow-2xl hover:-translate-y-1">
+    <div className="mx-6 mb-6">
+      <div className="bg-base-100 shadow-lg rounded-xl border border-base-300 transition duration-300 hover:shadow-xl hover:-translate-y-1">
         <details className="w-full">
-          <summary className="cursor-pointer flex flex-col md:flex-row md:items-center md:justify-between gap-2 md:gap-4 font-semibold text-lg text-gray-800 p-6">
+          <summary className="cursor-pointer flex flex-col md:flex-row md:items-center md:justify-between gap-2 md:gap-4 font-semibold text-lg text-base-content p-6">
             <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-6">
               <span>Request from {user?.fullName || "Unknown"}</span>
               <span
                 className={`text-sm font-medium px-3 py-1 rounded-full ${
                   slotIsPast
-                    ? "bg-gray-200 text-gray-500"
-                    : "bg-blue-100 text-blue-800"
+                    ? "bg-base-200 text-base-content/50"
+                    : "bg-primary/10 text-primary"
                 }`}
                 title={`Slot time: ${formattedDate}`}
               >
@@ -150,10 +143,10 @@ export default function UserRequestDetails({
               <span
                 className={`text-sm font-medium px-3 py-1 rounded-full ${
                   status === "accepted" && isPayment
-                    ? "bg-green-200 text-green-800"
+                    ? "bg-success/20 text-success"
                     : status === "accepted"
-                    ? "bg-yellow-200 text-yellow-800"
-                    : "bg-yellow-200 text-yellow-900"
+                    ? "bg-warning/20 text-warning"
+                    : "bg-warning/20 text-warning"
                 }`}
               >
                 {status === "accepted" && isPayment
@@ -179,16 +172,16 @@ export default function UserRequestDetails({
             </div>
           </summary>
 
-          <div className="border-t border-gray-300 pt-6 px-6 pb-6">
+          <div className="border-t border-base-300 pt-6 px-6 pb-6">
             {/* User Profile */}
-            <section className="mb-6 p-6 bg-white rounded-lg shadow-md">
-              <h4 className="text-xl font-semibold mb-3 flex items-center gap-2">
+            <section className="mb-6 p-6 bg-base-100 rounded-lg shadow">
+              <h4 className="text-xl font-semibold mb-3 text-base-content">
                 User Profile
               </h4>
               {user ? (
                 <>
-                  <p className="flex items-center gap-2 text-gray-700">
-                    <HiMail className="text-lg text-blue-600" />
+                  <p className="flex items-center gap-2 text-base-content/80">
+                    <HiMail className="text-lg text-primary" />
                     <a
                       href={`mailto:${user.email}`}
                       className="hover:underline"
@@ -197,7 +190,7 @@ export default function UserRequestDetails({
                     </a>
                   </p>
                   {user.linkedinURL && (
-                    <p className="flex items-center gap-2 text-gray-700">
+                    <p className="flex items-center gap-2 text-base-content/80">
                       <FaLinkedin className="text-lg text-blue-700" />
                       <a
                         href={user.linkedinURL}
@@ -210,7 +203,7 @@ export default function UserRequestDetails({
                     </p>
                   )}
                   {user.twitterURL && (
-                    <p className="flex items-center gap-2 text-gray-700">
+                    <p className="flex items-center gap-2 text-base-content/80">
                       <FaTwitter className="text-lg text-sky-500" />
                       <a
                         href={user.twitterURL}
@@ -223,7 +216,7 @@ export default function UserRequestDetails({
                     </p>
                   )}
                   {user.websiteURL && (
-                    <p className="flex items-center gap-2 text-gray-700">
+                    <p className="flex items-center gap-2 text-base-content/80">
                       <FaGlobe className="text-lg text-green-600" />
                       <a
                         href={user.websiteURL}
@@ -237,13 +230,13 @@ export default function UserRequestDetails({
                   )}
                 </>
               ) : (
-                <p className="text-gray-500">Loading user profile...</p>
+                <p className="text-base-content/50">Loading user profile...</p>
               )}
             </section>
 
             {/* Session Details */}
-            <section className="mb-6 p-6 bg-white rounded-lg shadow-md">
-              <h4 className="text-xl font-semibold mb-3 flex items-center gap-2">
+            <section className="mb-6 p-6 bg-base-100 rounded-lg shadow">
+              <h4 className="text-xl font-semibold mb-3 text-base-content">
                 Session Details
               </h4>
               {session ? (
@@ -258,7 +251,6 @@ export default function UserRequestDetails({
                   <p>
                     <strong>Stage:</strong> {session.stage || "N/A"}
                   </p>
-
                   <p>
                     <strong>Help With:</strong> {session.helpWith || "N/A"}
                   </p>
@@ -268,25 +260,25 @@ export default function UserRequestDetails({
                   </p>
                 </>
               ) : (
-                <p className="text-gray-500">Loading session details...</p>
+                <p className="text-base-content/50">
+                  Loading session details...
+                </p>
               )}
             </section>
 
-            {/* Payment notice if accepted but payment pending */}
+            {/* Payment / Expiry States */}
             {status === "accepted" && !isPayment && (
-              <p className="text-yellow-700 font-semibold">
+              <p className="text-warning font-semibold">
                 Accepted, waiting for user to make full payment
               </p>
             )}
-            {/* slot is confirmed and payment received  */}
             {status === "accepted" && isPayment && (
-              <div className="mt-4 p-4 rounded-md bg-green-100 text-green-800 border border-green-300 font-semibold">
+              <div className="mt-4 p-4 rounded-md bg-success/10 text-success border border-success font-semibold">
                 Slot confirmed! Payment received.
               </div>
             )}
-            {/* slot expired adn user did not make the full payment  */}
             {status === "expired" && (
-              <p className="text-red-700 font-semibold mt-4">
+              <p className="text-error font-semibold mt-4">
                 Time expired, user did not make the full payment
               </p>
             )}

@@ -1,9 +1,6 @@
 // middleware.ts
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-import connect from "@/dbconfig/dbconfig";
-// const router = useRouter();
-// import ExpertApplication from "@/models/experts";
 
 // Define the shape of your user metadata
 interface UserMetadata {
@@ -28,12 +25,7 @@ const isExpertRoute = createRouteMatcher([
   "/experts/calendar",
   "/experts/upcomingmeetings",
 ]);
-const getExpertStatus = async (clerkID: string) => {
-  await connect();
-  const { ExpertApplication } = await import("@/models/experts"); // Ensure this is correct path
-  const expert = await ExpertApplication.findOne({ clerkID });
-  return expert?.status || null;
-};
+
 export default clerkMiddleware(async (auth, req) => {
   const { userId, sessionClaims } = await auth();
   const url = req.nextUrl.clone();
@@ -58,14 +50,6 @@ export default clerkMiddleware(async (auth, req) => {
     // Redirect expert away from client routes
 
     if (isExpert) {
-      const expertStatus = await getExpertStatus(userId);
-
-      // Restrict login if expert is pending
-      if (expertStatus === "pending") {
-        url.pathname = "/";
-        url.searchParams.set("status", "pending");
-        return NextResponse.redirect(url);
-      }
       //prevent expert from client pages
       const Pages = ["/", "/explore", "/become_an_expert", "/admin"];
       if (Pages.includes(pathname)) {
