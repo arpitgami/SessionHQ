@@ -33,17 +33,7 @@ export default function Home() {
               </SignUpButton>
             </div>
 
-            {/* Ratings */}
-            <div className="flex items-center gap-2">
-              <div className="rating">
-                <div className="mask mask-star" aria-label="1 star"></div>
-                <div className="mask mask-star" aria-label="2 star"></div>
-                <div className="mask mask-star" aria-label="3 star" ></div>
-                <div className="mask mask-star" aria-label="4 star"></div>
-                <div className="mask mask-star" aria-label="5 star" aria-current="true"></div>
-              </div>
-              <span className="text-sm text-base-content/70">5.0 from 80+ reviews</span>
-            </div>
+
           </div>
 
           {/* Right Grid with Image and Stats */}
@@ -59,18 +49,20 @@ export default function Home() {
             </div>
             <div className="grid grid-rows-3 gap-4">
               <div className="bg-base-200 p-4 border border-base-300">
-                <h3 className="text-xl font-bold">100+</h3>
-                <p className="text-sm">Experts Available</p>
+                <h3 className="text-xl font-bold">Built for Founders</h3>
+                <p className="text-sm">Personalized guidance from real startup operators</p>
               </div>
               <div className="bg-success/20 p-4 border border-success text-success-content">
-                <h3 className="text-xl font-bold">1951+</h3>
-                <p className="text-sm">Sessions Booked</p>
+                <h3 className="text-xl font-bold">No Spam. No Noise.</h3>
+                <p className="text-sm">Every session request is thoughtful & curated</p>
               </div>
               <div className="bg-secondary text-secondary-content p-4 border border-base-300">
-                <h3 className="text-xl font-bold">6+ Years</h3>
-                <p className="text-sm">of Expert Experience</p>
+                <h3 className="text-xl font-bold">Respectful by Design</h3>
+                <p className="text-sm">Protected time for experts, value-first for users</p>
               </div>
             </div>
+
+
           </div>
         </div>
       </section>
@@ -109,9 +101,6 @@ export default function Home() {
       <footer className="footer sm:footer-horizontal bg-neutral text-neutral-content p-10 ">
         <aside>
           <h1 className="font-black text-3xl ">SessionHQ</h1>
-          <p>
-            Providing reliable tech since 1992
-          </p>
         </aside>
         <nav>
           <h6 className="footer-title ">Created By </h6>

@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
       for (const time of removed) {
         const fullSlot = new Date(`${date}T${time}:00`);
 
-        if (fullSlot > now) {
+        if (fullSlot > now) { //future slots only, past slots are already marked as declined
 
           // Marking pending request of removed slot as cancelled.
           console.log("slot changed", date, time);

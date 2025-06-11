@@ -67,8 +67,11 @@ export const Navigation = () => {
           })}
         </ul>
 
+
         {/* Right Side: Auth / User */}
+
         <div className="hidden md:flex items-center gap-3 text-white font-medium">
+
           <SignedOut>
             <SignInButton mode="modal" forceRedirectUrl="/post-sign-in">
               <button className="px-3 py-1 rounded">Sign In</button>

@@ -49,7 +49,7 @@ export async function GET(req: NextRequest) {
     const id = searchParams.get("id");
 
     if (!id) {
-      const experts = await ExpertApplication.find({ status: "pending" }).select(
+      const experts = await ExpertApplication.find({ status: "accepted" }).select(
         "-_id -__v -createdAt -updatedAt"
       );
       // console.log(experts);

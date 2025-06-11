@@ -66,7 +66,7 @@ export async function GET(req: NextRequest) {
             const time = timeWithMs.slice(0, 5);
 
             const updatedTimes = (lockedSlots.get(dateStr) || []).filter(
-              (t) => t !== time
+              (t: any) => t !== time
             );
 
             if (updatedTimes.length > 0) {
