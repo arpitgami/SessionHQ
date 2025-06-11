@@ -1,6 +1,9 @@
 // middleware.ts
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
+import connect from "@/dbconfig/dbconfig";
+// const router = useRouter();
+// import ExpertApplication from "@/models/experts";
 
 // Define the shape of your user metadata
 interface UserMetadata {
@@ -14,18 +17,23 @@ const isPublicRoute = createRouteMatcher([
   "/sign-in",
   "/sign-up",
   "/become_an_expert",
-  '/api/expert/(.*)',
-  '/api/stripe/webhook',
-  '/api/request/getrequest',
-  '/api/meeting/getmeeting'
+  "/api/expert/(.*)",
+  "/api/stripe/webhook",
+  "/api/request/getrequest",
+  "/api/meeting/getmeeting",
 ]);
-
+const isAdminRoute = createRouteMatcher(["/admin"]);
 const isExpertRoute = createRouteMatcher([
   "/experts/requests",
   "/experts/calendar",
   "/experts/upcomingmeetings",
 ]);
-
+const getExpertStatus = async (clerkID: string) => {
+  await connect();
+  const { ExpertApplication } = await import("@/models/experts"); // Ensure this is correct path
+  const expert = await ExpertApplication.findOne({ clerkID });
+  return expert?.status || null;
+};
 export default clerkMiddleware(async (auth, req) => {
   const { userId, sessionClaims } = await auth();
   const url = req.nextUrl.clone();
@@ -37,30 +45,48 @@ export default clerkMiddleware(async (auth, req) => {
   console.log("Found role:", role); // Debug log
 
   const isExpert = role === "expert";
-
+  const isAdmin = role === "admin";
   // If user is not authenticated and trying to access protected routes direct to sign-in and then go to requested route
   if (!userId && !isPublicRoute(req)) {
     const homeUrl = new URL("/", req.url);
-    homeUrl.searchParams.set("authError", "true");
+    homeUrl.searchParams.set("toast", "login_required");
     return NextResponse.redirect(homeUrl);
   }
 
   // If user is authenticated, handle role-based redirections
   if (userId) {
     // Redirect expert away from client routes
-    const clientPages = ["/", "/explore", "/become_an_expert"];
-    if (isExpert && clientPages.includes(pathname)) {
-      url.pathname = "/experts/calendar";
+
+    if (isExpert) {
+      const expertStatus = await getExpertStatus(userId);
+
+      // Restrict login if expert is pending
+      if (expertStatus === "pending") {
+        url.pathname = "/";
+        url.searchParams.set("status", "pending");
+        return NextResponse.redirect(url);
+      }
+      //prevent expert from client pages
+      const Pages = ["/", "/explore", "/become_an_expert", "/admin"];
+      if (Pages.includes(pathname)) {
+        url.pathname = "/experts/requests";
+        url.searchParams.set("toast", "restricted");
+        return NextResponse.redirect(url);
+      }
+    }
+    // CLients from Admin-only route protection
+    if (isAdminRoute(req) && !isAdmin) {
+      url.pathname = "/explore";
+      url.searchParams.set("toast", "admin_only");
       return NextResponse.redirect(url);
     }
-
     // Redirect non-expert users (clients) away from expert-only routes
     if (!isExpert && isExpertRoute(req)) {
-      url.pathname = "/";
+      url.pathname = "/explore";
+      url.searchParams.set("toast", "restricted_expert");
       return NextResponse.redirect(url);
     }
   }
-
   return NextResponse.next();
 });
 

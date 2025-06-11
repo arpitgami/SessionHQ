@@ -3,6 +3,7 @@
 import { ExpertCard } from "@/component/ExpertCard";
 import { useEffect, useState } from "react";
 import useUserGuard from "@/hooks/useUserGuard";
+// import { FaInbox } from "react-icons/fa";
 export default function ExplorePage() {
   const [experts, setExperts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -37,6 +38,11 @@ export default function ExplorePage() {
       {/* <p className="text-xl text-gray-900 text-center">
         Learn from professionals from your industry{" "}
       </p> */}
+      <div className="text-center mb-6">
+        <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+          Our Experts
+        </h2>
+      </div>
       <br />
       <br />
       {loading ? (

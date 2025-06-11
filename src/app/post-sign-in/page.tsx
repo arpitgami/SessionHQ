@@ -13,9 +13,9 @@ export default function PostSignInRedirect() {
 
     const role = user?.publicMetadata?.role;
     if (role === "expert") {
-      router.replace("/experts/upcomingmeetings");
+      router.replace("/experts/requests");
     } else {
-      router.replace("/");
+      router.replace("/explore");
     }
   }, [isLoaded, user, router]);
 
