@@ -97,7 +97,7 @@ export default function ControlPannel({ stream, setStream, setIsScreenSharing, i
     };
 
     return (
-        <div className="flex justify-center gap-4 p-4 rounded-xl bg-base-100 shadow-sm self-center ">
+        <div className="flex justify-center gap-4 p-4 rounded-xl bg-base-200 shadow-sm self-center ">
             <button className={`btn bg-base-100 btn-circle ${!micOn ? "bg-red-500" : ""} `} onClick={toggleMic}>
                 {micOn ? (
                     <FaMicrophone />

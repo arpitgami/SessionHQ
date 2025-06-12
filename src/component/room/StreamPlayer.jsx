@@ -14,7 +14,7 @@ const StreamPlayer = (props) => {
     if (!stream || !userID) return null;
 
     return (
-        <div className={`${containerStyles} transition-all duration-300 rounded overflow-hidden`}>
+        <div className={`${containerStyles} transition-all duration-300 rounded overflow-hidden p-2 border`}>
             {stream && userID && <ReactPlayer
                 url={stream}
                 muted={muted}

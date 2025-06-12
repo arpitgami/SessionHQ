@@ -170,11 +170,10 @@ export default function NotificationDropdown() {
       </button>
 
       <div
-        className={`absolute right-0 mt-2 w-96 bg-base-100 shadow-xl rounded-xl max-h-[400px] overflow-y-auto border border-neutral  z-50 transition-all duration-300 ease-in-out transform  ${
-          isOpen
-            ? "opacity-100 scale-100 pointer-events-auto"
-            : "opacity-0 scale-95 pointer-events-none"
-        }`}
+        className={`absolute right-0 mt-2 w-96 bg-base-200 shadow-xl rounded-xl max-h-[400px] overflow-y-auto border border-neutral  z-50 transition-all duration-300 ease-in-out transform  ${isOpen
+          ? "opacity-100 scale-100 pointer-events-auto"
+          : "opacity-0 scale-95 pointer-events-none"
+          }`}
       >
         <div className="p-4">
           <h2 className="font-semibold text-lg mb-2 text-base-content">
@@ -194,22 +193,20 @@ export default function NotificationDropdown() {
             requests.map((r) => (
               <div
                 key={r._id}
-                className={`rounded-lg p-4 mb-3 border shadow-sm hover:shadow-md transition ${
-                  r.status === "accepted"
-                    ? "bg-success/10 border-success"
-                    : "bg-base-200 border-base-300"
-                }`}
+                className={`rounded-lg p-4 mb-3 border shadow-sm hover:shadow-md transition ${r.status === "accepted"
+                  ? "bg-success/10 border-success"
+                  : "bg-base-200 border-base-300"
+                  }`}
               >
                 <div className="flex justify-between items-center mb-2">
                   <span className="font-semibold text-base text-base-content">
                     {r.expertName}
                   </span>
                   <span
-                    className={`capitalize px-3 py-1 text-xs font-semibold rounded-full ${
-                      r.status === "accepted" && r.isPayment
-                        ? "bg-info text-info-content"
-                        : getStatusColor(r.status)
-                    }`}
+                    className={`capitalize px-3 py-1 text-xs font-semibold rounded-full ${r.status === "accepted" && r.isPayment
+                      ? "bg-info text-info-content"
+                      : getStatusColor(r.status)
+                      }`}
                   >
                     {r.status === "accepted" && r.isPayment
                       ? "Confirmed"
@@ -241,7 +238,7 @@ export default function NotificationDropdown() {
                   </p>
                 )}
                 {r.status === "pending" && (
-                  <p className="text-xs text-primary mt-1 font-medium">
+                  <p className="text-xs text-base-content mt-1 font-medium">
                     Waiting for expert to respond
                   </p>
                 )}
@@ -257,7 +254,7 @@ export default function NotificationDropdown() {
                 )}
                 {r.status === "expired" && (
                   <>
-                    <p className="text-xs text-neutral/70 mt-1 font-medium italic">
+                    <p className="text-xs text-base-content mt-1 font-medium italic">
                       Time expired, user did not make the full payment.No
                       refund.
                     </p>
@@ -265,7 +262,7 @@ export default function NotificationDropdown() {
                 )}
                 {r.status === "failed" && (
                   <>
-                    <p className="text-xs text-amber-900 mt-1 font-medium italic">
+                    <p className="text-xs text-base-content mt-1 font-medium italic">
                       Try Again with another slot.Expert preferred other user
                       for that slot. Refund intiated.
                     </p>
@@ -276,7 +273,7 @@ export default function NotificationDropdown() {
                     {/* <p className="text-xs text-neutral mt-1 font-medium">
                       Slot has expired. No Refund
                     </p> */}
-                    <p className="text-xs text-neutral/70 mt-1 font-medium ">
+                    <p className="text-xs text-base-content mt-1 font-medium ">
                       Expert removed the slot, you can try different slot. Refund initated.
                     </p>
                   </>

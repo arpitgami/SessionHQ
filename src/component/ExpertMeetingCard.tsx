@@ -94,7 +94,7 @@ export default function ExpertMeetingCard({ meeting }: { meeting: Meeting }) {
     if (!userData || !userSessionData) return <div>Loading</div>;
 
     return (
-        <div className="flex bg-base-100 shadow-md rounded-2xl p-4 my-4 gap-4 w-full max-w-4xl mx-auto">
+        <div className="flex bg-base-200 shadow-md rounded-2xl p-4 my-4 gap-4 w-full max-w-4xl mx-auto">
             <div className="w-[50px] h-[50px] flex items-center justify-center bg-primary rounded-full text-xl font-bold text-base-100">
                 {userData.fullName.charAt(0).toUpperCase()}
             </div>

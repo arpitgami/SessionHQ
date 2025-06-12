@@ -29,7 +29,7 @@ export default function FeedbackForm() {
                             key={value}
                             type="radio"
                             name="rating"
-                            className="mask mask-star-2 bg-primary"
+                            className="mask mask-star-2 bg-accent"
                             checked={rating === value}
                             onChange={() => setRating(value)}
                         />

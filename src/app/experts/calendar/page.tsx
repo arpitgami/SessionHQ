@@ -102,13 +102,13 @@ export default function ExpertAvailabilityCalendar() {
           <div className="w-4 h-4 bg-success rounded" /> Saved Slot
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-primary rounded" /> New Slot
+          <div className="w-4 h-4 bg-accent rounded" /> New Slot
         </div>
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 bg-error/30 rounded" /> Removed Slot
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-base-200 rounded" /> Locked/Past
+          <div className="w-4 h-4 bg-base-300 rounded" /> Locked/Past
         </div>
       </div>
 
@@ -167,16 +167,16 @@ export default function ExpertAvailabilityCalendar() {
                     const isUnchangedSaved = isSelected && isSaved;
                     const isLocked = lockedSlots[dateStr]?.includes(timestr);
 
-                    let bgClass = "bg-base-100 hover:bg-base-200";
+                    let bgClass = "bg-base-200 hover:bg-base-300";
                     if (isPast || isLocked)
                       bgClass =
-                        "bg-base-200 text-base-content/40 cursor-not-allowed";
+                        "bg-base-300 text-base-content/40 cursor-not-allowed";
                     else if (wasSavedButRemoved)
                       bgClass = "bg-error/20 text-error";
                     else if (isUnchangedSaved)
                       bgClass = "bg-success text-success-content";
                     else if (isNewlySelected)
-                      bgClass = "bg-primary text-primary-content";
+                      bgClass = "bg-accent text-primary-content";
 
                     return (
                       <td
@@ -203,11 +203,10 @@ export default function ExpertAvailabilityCalendar() {
           onClick={saveAvailability}
           disabled={!hasChanges}
           className={`px-6 py-2 rounded-lg font-semibold transition 
-        ${
-          hasChanges
-            ? "bg-primary hover:bg-primary/80 text-primary-content"
-            : "bg-base-200 text-base-content/40 cursor-not-allowed"
-        }
+        ${hasChanges
+              ? "bg-primary hover:bg-primary/80 text-primary-content"
+              : "bg-base-200 text-base-content/40 cursor-not-allowed"
+            }
       `}
         >
           Save Availability

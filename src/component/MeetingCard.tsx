@@ -81,7 +81,7 @@ export default function MeetingCard({ meeting }: any) {
 
     if (isLoading) return <div>Loading....</div>
     return (
-        expert && <div className="flex bg-base-100 shadow-md rounded-2xl p-4 my-4 gap-4 w-full max-w-4xl mx-auto ">
+        expert && <div className="flex bg-base-200 shadow-md rounded-2xl p-4 my-4 gap-4 w-full max-w-4xl mx-auto ">
             <Image
                 src={expert?.imageURL || "/default-avatar.png"}
                 alt={expert?.fullName}

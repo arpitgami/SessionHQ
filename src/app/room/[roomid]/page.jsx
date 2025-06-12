@@ -210,9 +210,9 @@ const page = () => {
         isChecking ? <div className="flex items-center justify-center h-screen w-screen text-md">Authorizing User....</div> :
 
 
-            <div className="flex h-screen w-screen items-center justify-evenly ">
+            <div data-theme="lofi" className="flex h-screen w-screen items-center justify-evenly ">
                 {remainingTime && (
-                    <div className="absolute top-2 left-10 -translate-x-1/2 bg-base-100 text-red-600 px-2 py-1 rounded-full text-sm shadow-sm z-50">
+                    <div className="absolute top-2 left-10 -translate-x-1/2 bg-base-200 text-red-600 px-2 py-1 rounded-full text-sm shadow-sm z-50">
                         {remainingTime}
                     </div>
                 )}

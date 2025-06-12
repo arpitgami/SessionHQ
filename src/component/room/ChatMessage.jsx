@@ -5,7 +5,7 @@ const ChatMessage = ({ name, message, isSelf }) => {
       <div className="chat-header">
         {name}
       </div>
-      <div className="chat-bubble chat-bubble-neutral ">{message}</div>
+      <div className="chat-bubble chat-bubble-base-300 ">{message}</div>
     </div>
   );
 };
