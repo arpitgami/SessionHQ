@@ -91,42 +91,50 @@ export default function ExpertAvailabilityCalendar() {
     return JSON.stringify(availability) !== JSON.stringify(savedAvailability);
   }, [availability, savedAvailability]);
   return (
-    <div className="p-4 sm:p-6 bg-white rounded-xl shadow-lg">
-      <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">
+    <div className="p-4 sm:p-6 bg-base-100 rounded-xl shadow-lg">
+      <h2 className="text-3xl font-bold text-center text-base-content mb-8">
         Availability Calendar
       </h2>
 
       {/* Legend */}
-      <div className="flex flex-wrap justify-center gap-4 mb-4 text-sm text-gray-600">
+      <div className="flex flex-wrap justify-center gap-4 mb-4 text-sm text-base-content/70">
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-green-500 rounded" /> Saved Slot
+          <div className="w-4 h-4 bg-success rounded" /> Saved Slot
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-blue-500 rounded" /> New Slot
+          <div className="w-4 h-4 bg-primary rounded" /> New Slot
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-red-200 rounded" /> Removed Slot
+          <div className="w-4 h-4 bg-error/30 rounded" /> Removed Slot
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-gray-300 rounded" /> Locked/Past
+          <div className="w-4 h-4 bg-base-200 rounded" /> Locked/Past
         </div>
       </div>
 
-      <div className="overflow-auto rounded border border-gray-300">
+      <div
+        className="overflow-auto rounded border border-neutral
+"
+      >
         <table className="min-w-max w-full border-collapse text-sm text-center">
-          <thead className="sticky top-0 bg-white shadow z-10">
+          <thead className="sticky top-0 bg-base-100 z-10 shadow">
             <tr>
-              <th className="p-2 bg-gray-50 border" />
+              <th
+                className="p-2 border border-neutral
+ bg-base-200"
+              />
               {[...Array(8)].map((_, i) => {
                 const date = addDays(today, i);
-                const dateStr = format(date, "yyyy-MM-dd");
                 return (
                   <th
                     key={i}
-                    className="p-2 border bg-gray-50 text-xs sm:text-sm"
+                    className="p-2 border border-neutral
+ bg-base-200 text-xs sm:text-sm"
                   >
                     <div className="font-semibold">{format(date, "EEE")}</div>
-                    <div className="text-gray-500">{format(date, "MMM d")}</div>
+                    <div className="text-base-content/60">
+                      {format(date, "MMM d")}
+                    </div>
                   </th>
                 );
               })}
@@ -137,7 +145,10 @@ export default function ExpertAvailabilityCalendar() {
               const timeStr = format(new Date(0, 0, 0, hour), "h a");
               return (
                 <tr key={hour}>
-                  <td className="p-2 border font-medium text-gray-700 bg-gray-50">
+                  <td
+                    className="p-2 border border-neutral
+ font-medium text-base-content bg-base-200"
+                  >
                     {timeStr}
                   </td>
                   {[...Array(8)].map((_, i) => {
@@ -156,20 +167,22 @@ export default function ExpertAvailabilityCalendar() {
                     const isUnchangedSaved = isSelected && isSaved;
                     const isLocked = lockedSlots[dateStr]?.includes(timestr);
 
-                    let bgClass = "bg-white hover:bg-blue-100";
+                    let bgClass = "bg-base-100 hover:bg-base-200";
                     if (isPast || isLocked)
-                      bgClass = "bg-gray-300 text-gray-600 cursor-not-allowed";
+                      bgClass =
+                        "bg-base-200 text-base-content/40 cursor-not-allowed";
                     else if (wasSavedButRemoved)
-                      bgClass = "bg-red-200 text-red-800";
+                      bgClass = "bg-error/20 text-error";
                     else if (isUnchangedSaved)
-                      bgClass = "bg-green-500 text-white";
+                      bgClass = "bg-success text-success-content";
                     else if (isNewlySelected)
-                      bgClass = "bg-blue-500 text-white";
+                      bgClass = "bg-primary text-primary-content";
 
                     return (
                       <td
                         key={`${dateStr}-${hour}`}
-                        className={`p-2 border cursor-pointer ${bgClass}`}
+                        className={`p-2 border border-neutral
+ cursor-pointer ${bgClass}`}
                         onClick={() => {
                           if (!isPast && !isLocked) toggleSlot(dateStr, hour);
                         }}
@@ -190,12 +203,12 @@ export default function ExpertAvailabilityCalendar() {
           onClick={saveAvailability}
           disabled={!hasChanges}
           className={`px-6 py-2 rounded-lg font-semibold transition 
-    ${
-      hasChanges
-        ? "bg-blue-600 hover:bg-blue-700 text-white"
-        : "bg-gray-300 text-gray-500 cursor-not-allowed"
-    }
-  `}
+        ${
+          hasChanges
+            ? "bg-primary hover:bg-primary/80 text-primary-content"
+            : "bg-base-200 text-base-content/40 cursor-not-allowed"
+        }
+      `}
         >
           Save Availability
         </button>

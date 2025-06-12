@@ -6,7 +6,7 @@ import { Navigation } from "@/component/Navbar";
 import "./globals.css";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-
+import { Toaster } from "react-hot-toast";
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -19,17 +19,24 @@ export default function RootLayout({
     setIsMounted(true);
   }, []);
 
-  const hideNavbarRoutes = ["/login", "/signup", "/feedback", "/success", "/failed"];
+  const hideNavbarRoutes = [
+    "/login",
+    "/signup",
+    "/feedback",
+    "/success",
+    "/failed",
+    "/admin",
+  ];
   const shouldHideNavbar =
     hideNavbarRoutes.includes(pathname) || pathname.startsWith("/room/");
 
   return (
     <ClerkProvider>
-      <html
-        data-theme="lofi"
-        lang="en">
+      <html data-theme="lofi" lang="en">
         <body>
           {/* Wait until after mount to render Navbar to avoid hydration mismatch */}
+
+          <Toaster position="top-center" />
           {isMounted && !shouldHideNavbar && <Navigation />}
           {children}
         </body>

@@ -5,8 +5,60 @@ import React from 'react';
 export default function RequestLifecycleSection() {
     return (
         <>
+            <section className="bg-base-200 py-20 px-6 sm:px-10 md:px-24">
+                <div className="max-w-4xl mx-auto text-center space-y-8">
+                    <div>
+                        <h1 className="text-4xl sm:text-5xl font-extrabold text-primary mb-2">
+                            SessionHQ
+                        </h1>
+                        <p className="text-base-content text-lg">
+                            High-signal 1:1 sessions for early-stage founders.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h2 className="text-xl sm:text-2xl font-bold text-base-content mb-4">
+                            Why We Built This
+                        </h2>
+                        <p className="text-base-content text-lg leading-relaxed">
+                            What if there was a platform where you could openly discuss your early-stage startup problems with seasoned operators — founders who’ve built, failed, scaled, and shipped?
+
+                            <br className="hidden sm:block" />
+                            <br />
+                            SessionHQ brings that to life: a curated 1:1 session platform engineered to connect early-stage founders with experienced experts in a noise-free, structured environment.
+
+                            Our focus is on thoughtful onboarding, frictionless scheduling, and seamless meetings — respecting both the founder’s hustle and the expert’s time.
+
+                        </p>
+                    </div>
+                </div>
+            </section>
+            <section className="max-w-6xl space-y-10 mx-auto px-4 py-12">
+                <div className="text-center">
+                    <h2 className="text-2xl font-bold text-primary">High Level Diagram</h2>
+                </div>
+
+                <div>
+                    <div className="w-full max-w-7xl rounded-2xl p-2">
+                        <Image
+                            src="/High Level Diagram Dark.png"
+                            alt="High Level Diagram"
+                            width={1400}
+                            height={600}
+                            className="w-full max-w-7xl border-2 rounded-2xl"
+                        />
+                    </div>
+                </div>
+            </section>
+
+            <div className="flex justify-center ">
+                <div className="divider divider-secondary w-3xl" />
+            </div>
+
+
+
             <section className="max-w-6xl mx-auto px-4 py-12">
-                <h2 className="text-3xl font-bold mb-4 text-center text-primary">Request Lifecycle</h2>
+                <h2 className="text-2xl font-bold mb-4 text-center text-primary">Request Lifecycle</h2>
                 <p className="text-center text-base-content mb-12">
                     This diagram outlines how a user’s request transitions through various states — from initial submission to final resolution.
                 </p>
@@ -14,9 +66,9 @@ export default function RequestLifecycleSection() {
                 {/* Diagram */}
                 <div className="flex justify-center mb-8">
                     <img
-                        src="Video Call.png"
+                        src="Request Flow Dark.png"
                         alt="Request Flow Diagram"
-                        className="w-full max-w-7xl border-2 rounded-2xl p-2"
+                        className="w-full max-w-7xl rounded-2xl p-2"
                     />
                 </div>
 
@@ -25,8 +77,8 @@ export default function RequestLifecycleSection() {
                     <table className="table table-zebra w-full">
                         <thead className="bg-base-200 text-base-content">
                             <tr>
-                                <th className="p-4 font-semibold text-secondary">Status</th>
-                                <th className="p-4 font-semibold text-secondary">Description</th>
+                                <th className="p-4 font-semibold text-base-content">Status</th>
+                                <th className="p-4 font-semibold text-base-content">Description</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -50,7 +102,7 @@ export default function RequestLifecycleSection() {
 
                 {/* Automation Explanation */}
                 <div className="bg-base-200 p-6 rounded-2xl ">
-                    <h3 className="text-xl font-bold mb-4 text-secondary">Automation & Realtime Status Handling</h3>
+                    <h3 className="text-xl font-bold mb-4 text-base-content">Automation & Realtime Status Handling</h3>
                     <ul className="list-disc list-inside space-y-2 text-base-content">
                         <li>
                             Every time a request is fetched from the database—whether by a user or admin—it undergoes a set of validation checks to determine if it has expired or timed out. If the request fails any check, it is immediately updated in the database before being sent back to the client.
@@ -62,9 +114,11 @@ export default function RequestLifecycleSection() {
 
                 </div>
             </section>
+
             <div className="flex justify-center ">
-                <div className="divider divider-accent w-md" />
+                <div className="divider divider-secondary w-3xl" />
             </div>
+
             <section className="max-w-6xl space-y-10 mx-auto px-4 py-12">
                 {/* Header */}
                 <div className="text-center">
@@ -73,11 +127,11 @@ export default function RequestLifecycleSection() {
                 </div>
 
                 {/* Video Flow Diagram */}
-                <div>
-                    <h3 className="text-xl font-semibold text-secondary mb-3">Video Call Flow</h3>
-                    <div className="w-full max-w-7xl border-2 rounded-2xl p-2">
+                <div className="text-center">
+                    <h3 className="text-xl font-semibold text-base-content mb-3">Video Call Flow</h3>
+                    <div className="w-full max-w-7xl rounded-2xl p-2">
                         <Image
-                            src="/Video Call.png"
+                            src="/Video Call Dark.png"
                             alt="Video Call Flow"
                             width={1400}
                             height={600}
@@ -87,11 +141,11 @@ export default function RequestLifecycleSection() {
                 </div>
 
                 {/* Chat Flow Diagram */}
-                <div>
-                    <h3 className="text-xl font-semibold text-secondary mb-3">Chat Messaging Flow</h3>
-                    <div className="w-full max-w-7xl border-2 rounded-2xl p-10">
+                <div className="text-center">
+                    <h3 className="text-xl font-semibold text-base-content mb-3">Chat Messaging Flow</h3>
+                    <div className="w-full max-w-7xl rounded-2xl p-10">
                         <Image
-                            src="/Chat Section.png"
+                            src="/Chat Section Dark.png"
                             alt="Chat Flow"
                             width={1200}
                             height={500}
@@ -100,6 +154,7 @@ export default function RequestLifecycleSection() {
                     </div>
                 </div>
             </section>
+
         </>
     );
 }

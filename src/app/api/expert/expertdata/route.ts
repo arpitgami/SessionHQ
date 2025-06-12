@@ -49,9 +49,9 @@ export async function GET(req: NextRequest) {
     const id = searchParams.get("id");
 
     if (!id) {
-      const experts = await ExpertApplication.find({ status: "accepted" }).select(
-        "-_id -__v -createdAt -updatedAt"
-      );
+      const experts = await ExpertApplication.find({
+        status: "accepted",
+      }).select("-_id -__v -createdAt -updatedAt");
       // console.log(experts);
       return NextResponse.json({ status: true, data: experts });
     }

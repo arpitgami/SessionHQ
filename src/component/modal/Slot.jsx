@@ -47,28 +47,24 @@ const Slot = ({ selectedSlot, setSelectedSlot, nextStep }) => {
 
   const today = new Date();
   today.setHours(0, 0, 0, 0); // normalize to midnight for comparison
-
   return (
     <div>
-      <div className="modal-box max-w-3xl">
+      <div className="modal-box max-w-3xl bg-base-100 text-base-content">
         <h3 className="text-xl font-semibold mb-4">Select a Slot</h3>
 
         <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
           {Object.entries(availability)
             .filter(([date]) => {
-              // Remove dates before today entirely
               const slotDate = new Date(date);
               slotDate.setHours(0, 0, 0, 0);
               return slotDate >= today;
             })
             .map(([date, slots]) => {
-              // Filter out past time slots for today only
               const slotDate = new Date(date);
               slotDate.setHours(0, 0, 0, 0);
 
               const futureSlots = slots.filter((time) => {
-                if (slotDate > today) return true; // all slots for future dates
-                // For today, filter out past time slots
+                if (slotDate > today) return true;
                 const [hour, minute] = time.split(":").map(Number);
                 const slotDateTime = new Date(date);
                 slotDateTime.setHours(hour, minute, 0, 0);
@@ -76,11 +72,8 @@ const Slot = ({ selectedSlot, setSelectedSlot, nextStep }) => {
               });
 
               return (
-                <div
-                  key={date}
-                  className="flex items-start gap-4 border-b pb-3"
-                >
-                  <div className="w-28 text-sm font-medium text-gray-700">
+                <div key={date} className="flex items-start gap-4 border-b border-base-300 pb-3">
+                  <div className="w-28 text-sm font-medium text-base-content/80">
                     {new Date(date).toLocaleDateString("en-US", {
                       weekday: "short",
                       month: "short",
@@ -89,40 +82,34 @@ const Slot = ({ selectedSlot, setSelectedSlot, nextStep }) => {
                   </div>
 
                   {futureSlots.length === 0 ? (
-                    <div className="text-gray-400 text-sm">No slots</div>
+                    <div className="text-base-content/40 text-sm">No slots</div>
                   ) : (
                     <div className="flex flex-wrap gap-2">
                       {futureSlots.map((time) => {
                         const isSelected =
-                          selectedSlot?.date === date &&
-                          selectedSlot?.time === time;
+                          selectedSlot?.date === date && selectedSlot?.time === time;
 
                         const isLocked = lockedSlots?.[date]?.includes(time);
 
                         const [hours, minutes] = time.split(":").map(Number);
                         const endHour = (hours + 1) % 24;
-                        const endTime = `${endHour
-                          .toString()
-                          .padStart(2, "0")}:${minutes
+                        const endTime = `${endHour.toString().padStart(2, "0")}:${minutes
                           .toString()
                           .padStart(2, "0")}`;
 
                         return (
                           <button
                             key={time}
-                            onClick={() =>
-                              !isLocked && handleSlotClick(date, time)
-                            }
+                            onClick={() => !isLocked && handleSlotClick(date, time)}
                             disabled={isLocked}
-                            className={`px-3 py-1 text-sm rounded-full border transition 
-        ${
-          isLocked
-            ? "bg-gray-200 text-gray-400 border-gray-300 cursor-not-allowed"
-            : isSelected
-            ? "bg-neutral text-white border-neutral"
-            : "bg-white text-gray-700 border-gray-300 hover:bg-base-300"
-        }
-      `}
+                            className={`px-3 py-1 text-sm rounded-full border transition
+                            ${isLocked
+                                ? "bg-base-300 text-base-content/40 border-base-300 cursor-not-allowed"
+                                : isSelected
+                                  ? "bg-primary text-primary-content border-primary"
+                                  : "bg-base-100 text-base-content border-base-300 hover:bg-base-200"
+                              }
+                          `}
                           >
                             {time} - {endTime}
                           </button>
@@ -148,6 +135,7 @@ const Slot = ({ selectedSlot, setSelectedSlot, nextStep }) => {
       </div>
     </div>
   );
+
 };
 
 export default Slot;

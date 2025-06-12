@@ -13,6 +13,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import NotificationDropdown from "@/component/Notification";
+import ThemeToggle from "@/component/Themetoggle";
 
 // Define separate navs
 const clientNavLinks = [
@@ -30,7 +31,6 @@ export const Navigation = () => {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const { user } = useUser();
-
 
   const isExpert = user?.publicMetadata?.role === "expert";
   const navLinks = isExpert ? expertNavLinks : clientNavLinks;
@@ -71,6 +71,7 @@ export const Navigation = () => {
         {/* Right Side: Auth / User */}
 
         <div className="hidden md:flex items-center gap-3 text-white font-medium">
+          <ThemeToggle />
 
           <SignedOut>
             <SignInButton mode="modal" forceRedirectUrl="/post-sign-in">
@@ -116,6 +117,7 @@ export const Navigation = () => {
             })}
           </ul>
           <div className="flex justify-end items-center gap-4 text-white">
+            <ThemeToggle />
             <SignedOut>
               <SignInButton />
               <SignUpButton />

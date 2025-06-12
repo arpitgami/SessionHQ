@@ -91,22 +91,27 @@ const LockYourSlot = ({ selectedSlot, expert, prevStep, user, formData }) => {
     }
 
     return (
-        <div className="modal-box max-w-md space-y-6 bg-white p-6 flex flex-col justify-center items-center px-4">
-            <div className="bg-white p-8 rounded-2xl  w-full max-w-lg text-center space-y-6">
-                <h2 className="text-2xl font-semibold text-gray-800">
+        <div className="modal-box max-w-md space-y-6 bg-base-100 p-6 flex flex-col justify-center items-center px-4 border border-base-300">
+            <div className="bg-base-100 p-8 rounded-2xl w-full max-w-lg text-center space-y-6 border border-base-300">
+                <h2 className="text-2xl font-semibold text-base-content">
                     Lock your slot on
                 </h2>
-                <p className="text-lg text-gray-600">
+                <p className="text-lg text-base-content">
                     <strong>{formattedDate}</strong> at <strong>{formattedTime}</strong> <br />
                     with expert <strong>{expertName}</strong>
                 </p>
 
-                <div className='flex flex-row justify-between'>
-                    <button className="btn btn-base-100" onClick={() => prevStep()}>Back</button>
-                    <button className="btn btn-primary" onClick={makePayment}>Pay Now</button>
+                <div className="flex flex-row justify-between">
+                    <button className="btn bg-base-200 text-base-content border border-base-300" onClick={() => prevStep()}>
+                        Back
+                    </button>
+                    <button className="btn btn-primary text-primary-content" onClick={makePayment}>
+                        Pay Now
+                    </button>
                 </div>
             </div>
         </div>
+
     );
 };
 

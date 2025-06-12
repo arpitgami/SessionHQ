@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { FaInbox } from "react-icons/fa";
 import UserRequestDetails from "@/component/UserRequestDetails";
+import { useRouter } from "next/navigation";
 
 type RequestType = {
   _id: string;
@@ -19,8 +20,26 @@ export type { RequestType };
 
 export default function ExpertRequests() {
   const { user } = useUser();
+  const router = useRouter();
   const [requests, setRequests] = useState<RequestType[]>([]);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const checkExpertStatus = async () => {
+      const res = await fetch("/api/expert/expert-status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ clerkID: user?.id }),
+      });
+
+      const data = await res.json();
+      if (data.status === "pending") {
+        router.replace("/?status=pending");
+      }
+    };
+
+    if (user) checkExpertStatus();
+  }, [user]);
 
   useEffect(() => {
     const fetchRequests = async () => {
@@ -44,11 +63,11 @@ export default function ExpertRequests() {
       fetchRequests();
     }
   }, [user?.id]);
+
   function handleRemoveRequest(requestId: string) {
-    setRequests((prevRequests) =>
-      prevRequests.filter((req) => req._id !== requestId)
-    );
+    setRequests((prev) => prev.filter((req) => req._id !== requestId));
   }
+
   function handleStatusChange(
     requestId: string,
     newStatus: string,
@@ -61,7 +80,6 @@ export default function ExpertRequests() {
           if (req._id === requestId) {
             return { ...req, status: "accepted" };
           }
-          // Decline all other requests for same expert & same slot
           if (
             req.expertID === expertID &&
             req.slot === slot &&
@@ -75,43 +93,42 @@ export default function ExpertRequests() {
       );
     }
   }
+
+  const filteredRequests = requests.filter(
+    (req) =>
+      req.status !== "rejected" &&
+      req.status !== "declined" &&
+      req.status !== "failed"
+  );
+
   return (
     <div className="max-w-5xl mx-auto px-4 py-6">
-      <h2 className="text-3xl font-extrabold text-center text-gray-800 mb-6 flex justify-center items-center gap-3">
-        <FaInbox className="text-indigo-600 text-4xl" />
+      <h2 className="text-3xl font-bold text-center text-base-content mb-6 flex justify-center items-center gap-3">
+        <FaInbox className="text-primary text-4xl" />
         Expert Requests
       </h2>
+
       {loading ? (
-        <p className="text-center text-gray-500">Loading requests...</p>
-      ) : requests.filter(
-          (req) =>
-            req.status !== "rejected" &&
-            req.status !== "declined" &&
-            req.status !== "failed"
-        ).length === 0 ? (
-        <div className="text-center text-gray-600 bg-gray-100 rounded-lg p-8 shadow-inner">
-          <p className="text-lg">No requests available right now.</p>
-          <p className="text-sm mt-2 text-gray-500">
+        <p className="text-center text-base-content/70">Loading requests...</p>
+      ) : filteredRequests.length === 0 ? (
+        <div className="text-center bg-base-200 rounded-xl p-8 shadow">
+          <p className="text-lg font-semibold text-base-content">
+            No requests available right now.
+          </p>
+          <p className="text-sm mt-2 text-base-content/60">
             You’ll see incoming session requests from users here.
           </p>
         </div>
       ) : (
         <div className="space-y-6">
-          {requests
-            .filter(
-              (req) =>
-                req.status !== "rejected" &&
-                req.status !== "declined" &&
-                req.status !== "failed"
-            )
-            .map((req) => (
-              <UserRequestDetails
-                key={req._id}
-                request={req}
-                onRemove={handleRemoveRequest}
-                onStatusChange={handleStatusChange}
-              />
-            ))}
+          {filteredRequests.map((req) => (
+            <UserRequestDetails
+              key={req._id}
+              request={req}
+              onRemove={handleRemoveRequest}
+              onStatusChange={handleStatusChange}
+            />
+          ))}
         </div>
       )}
     </div>
