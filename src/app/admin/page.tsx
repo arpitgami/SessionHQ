@@ -92,7 +92,7 @@ export default function AdminExpertsPage() {
       {loadingPage ? (
         <p>Loading experts...</p>
       ) : experts.length === 0 ? (
-        <p className="text-gray-500">No pending experts to approve.</p>
+        <p className="text-base-content text-opacity-60">No pending experts to approve.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {experts.map((expert) => (

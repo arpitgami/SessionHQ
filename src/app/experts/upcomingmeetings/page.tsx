@@ -53,7 +53,7 @@ export default function UpcomingSession() {
                 ))
             )}
             {meetings && meetings.length === 0 && (
-                <p className="text-center text-gray-500">No meetings scheduled.</p>
+                <p className="text-center text-base-content text-opacity-60">No meetings scheduled.</p>
             )}
         </div>
     );
