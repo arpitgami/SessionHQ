@@ -46,13 +46,15 @@ export default function RequestLifecycleSection() {
 
         <div>
           <div className="w-full max-w-7xl rounded-2xl p-2">
-            <Image
-              src="/High Level Diagram Dark.png"
-              alt="High Level Diagram"
-              width={1400}
-              height={600}
-              className="w-full max-w-7xl border-2 rounded-2xl"
-            />
+            <div className="card bg-base-100 shadow-xl border border-base-300 p-6">
+              <Image
+                src="/High Level Diagram Dark.png"
+                alt="High Level Diagram"
+                width={1400}
+                height={600}
+                className="w-full max-w-7xl border-2 rounded-2xl"
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -70,11 +72,13 @@ export default function RequestLifecycleSection() {
         </p>
         {/* Diagram */}
         <div className="flex justify-center mb-4">
-          <img
-            src="userexpertdark.svg"
-            alt="userexpertdark.svg"
-            className="w-full max-w-3xl rounded-2xl p-2"
-          />
+          <div className="card bg-base-100 shadow-xl border border-base-300 p-6">
+            <img
+              src="userexpertdark.svg"
+              alt="userexpertdark.svg"
+              className="w-full max-w-3xl rounded-2xl p-2"
+            />
+          </div>
         </div>
       </section>
       <div className="flex justify-center ">
@@ -91,11 +95,13 @@ export default function RequestLifecycleSection() {
 
         {/* Diagram */}
         <div className="flex justify-center mb-8">
-          <img
-            src="Request Flow Dark.png"
-            alt="Request Flow Diagram"
-            className="w-full max-w-7xl rounded-2xl p-2"
-          />
+          <div className="card bg-base-100 shadow-xl border border-base-300 p-6">
+            <img
+              src="Request Flow Dark.png"
+              alt="Request Flow Diagram"
+              className="w-full max-w-7xl rounded-2xl p-2"
+            />
+          </div>
         </div>
 
         {/* Status List */}
@@ -196,13 +202,15 @@ export default function RequestLifecycleSection() {
             Video Call Flow
           </h3>
           <div className="w-full max-w-7xl rounded-2xl p-2">
-            <Image
-              src="/Video Call Dark.png"
-              alt="Video Call Flow"
-              width={1400}
-              height={600}
-              className="w-full max-w-7xl border-2 rounded-2xl"
-            />
+            <div className="card bg-base-100 shadow-xl border border-base-300 p-6">
+              <Image
+                src="/Video Call Dark.png"
+                alt="Video Call Flow"
+                width={1400}
+                height={600}
+                className="w-full max-w-7xl border-2 rounded-2xl"
+              />
+            </div>
           </div>
         </div>
 
@@ -212,13 +220,15 @@ export default function RequestLifecycleSection() {
             Chat Messaging Flow
           </h3>
           <div className="w-full max-w-7xl rounded-2xl p-10">
-            <Image
-              src="/Chat Section Dark.png"
-              alt="Chat Flow"
-              width={1200}
-              height={500}
-              className=""
-            />
+            <div className="card bg-base-100 shadow-xl border border-base-300 p-6">
+              <Image
+                src="/Chat Section Dark.png"
+                alt="Chat Flow"
+                width={1200}
+                height={500}
+                className=""
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -236,14 +246,46 @@ export default function RequestLifecycleSection() {
         </p>
         {/* Diagram */}
         <div className="flex justify-center mb-4">
-          <img
-            src="databasemodel.svg"
-            alt="databasemodel.svg"
-            className="w-full max-w-5xl rounded-2xl p-2"
-          />
+          <div className="card bg-base-100 shadow-xl border border-base-300 p-6">
+            <img
+              src="databasemodel.svg"
+              alt="databasemodel.svg"
+              className="w-full max-w-5xl rounded-2xl p-2"
+            />
+          </div>
         </div>
       </section>
-      <footer className="footer sm:footer-horizontal bg-neutral text-neutral-content p-10 ">
+
+      <section className="max-w-3xl mx-auto px-6 py-6 bg-gradient-to-br from-base-200 to-base-300 rounded-3xl shadow-lg ring-1 ring-base-300/60 backdrop-blur-sm">
+        <h2 className="text-3xl font-extrabold mb-10 text-center text-primary tracking-tight">
+          Tech Stack Overview
+        </h2>
+        <div className="grid grid-cols-1 divide-y divide-base-300">
+          {[
+            { label: "Language", value: "TypeScript" },
+            { label: "Framework", value: "Next.js" },
+            { label: "Realtime & Video", value: "WebRTC, PeerJS, Socket.IO" },
+            { label: "Styling", value: "TailwindCSS, DaisyUI" },
+            { label: "Database", value: "MongoDB" },
+            { label: "Payments & Media", value: "Stripe, Cloudinary" },
+            { label: "Authentication & Email", value: "Clerk, Nodemailer" },
+          ].map(({ label, value }) => (
+            <div
+              key={label}
+              className="flex justify-between items-center py-4 px-2 hover:bg-base-100/30 transition rounded-md"
+            >
+              <span className="text-md font-medium text-base-content">
+                {label}
+              </span>
+              <span className="text-sm text-primary font-semibold tracking-wide bg-primary/10 px-3 py-1 rounded-full">
+                {value}
+              </span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <footer className="footer sm:footer-horizontal bg-neutral text-neutral-content mt-10 p-10 ">
         <aside>
           <h1 className="font-black text-3xl ">SessionHQ</h1>
         </aside>
