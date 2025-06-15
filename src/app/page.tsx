@@ -41,9 +41,9 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-base-100 text-base-content">
       {/* Hero Section */}
-      <section className="bg-base-100 text-base-content py-20 px-6 relative">
-        <div className="absolute top-6 right-30">
-          <div className="btn btn-secondary " onClick={() => router.push("/engineering")}>Engineering</div>
+      <section className="bg-base-100 text-base-content py-25 px-6 relative">
+        <div className="absolute top-1 right-30">
+          <div className="btn bg-accent/10 border-base-content rounded-2xl  " onClick={() => router.push("/engineering")}>Engineering Page</div>
         </div>
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
           {/* Left Content */}

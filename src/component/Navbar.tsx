@@ -10,10 +10,11 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import NotificationDropdown from "@/component/Notification";
 import ThemeToggle from "@/component/Themetoggle";
+
 
 // Define separate navs
 const clientNavLinks = [
@@ -31,6 +32,10 @@ export const Navigation = () => {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const { user } = useUser();
+
+  // useEffect(() => {
+  //   console.log("pathname:", pathname);
+  // }, [pathname])
 
   const isExpert = user?.publicMetadata?.role === "expert";
   const navLinks = isExpert ? expertNavLinks : clientNavLinks;

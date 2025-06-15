@@ -1,11 +1,12 @@
 "use client";
 import Image from "next/image";
 import { FaGithub } from "react-icons/fa";
+import { FaLinkedin } from "react-icons/fa6";
 import React from "react";
 
 export default function RequestLifecycleSection() {
   return (
-    <>
+    <div>
       <section className="bg-base-200 py-20 px-6 sm:px-10 md:px-24">
         <div className="max-w-4xl mx-auto text-center space-y-8">
           <div>
@@ -256,8 +257,8 @@ export default function RequestLifecycleSection() {
         </div>
       </section>
 
-      <section className="max-w-3xl mx-auto px-6 py-6 bg-gradient-to-br from-base-200 to-base-300 rounded-3xl shadow-lg ring-1 ring-base-300/60 backdrop-blur-sm">
-        <h2 className="text-3xl font-extrabold mb-10 text-center text-primary tracking-tight">
+      <section className="max-w-2xl mx-auto px-6 py-6  rounded-3xl shadow-lg ring-1 ring-base-300/60 backdrop-blur-sm">
+        <h2 className="text-2xl font-extrabold mb-10 text-center text-primary tracking-tight">
           Tech Stack Overview
         </h2>
         <div className="grid grid-cols-1 divide-y divide-base-300">
@@ -272,7 +273,7 @@ export default function RequestLifecycleSection() {
           ].map(({ label, value }) => (
             <div
               key={label}
-              className="flex justify-between items-center py-4 px-2 hover:bg-base-100/30 transition rounded-md"
+              className="flex justify-between items-center py-4 px-2  transition rounded-md"
             >
               <span className="text-md font-medium text-base-content">
                 {label}
@@ -285,36 +286,61 @@ export default function RequestLifecycleSection() {
         </div>
       </section>
 
-      <footer className="footer sm:footer-horizontal bg-neutral text-neutral-content mt-10 p-10 ">
-        <aside>
-          <h1 className="font-black text-3xl ">SessionHQ</h1>
-        </aside>
-        <nav>
-          <h6 className="footer-title ">Created By </h6>
-          <div className="flex gap-10">
-            <a
-              href="https://github.com/arpitgami"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <div className="flex flex-row gap-2 hover:text-gray-400 transition">
-                <div className="font-mono text-md ">Arpit Gami</div>
-                <FaGithub className="text-xl " />
-              </div>
-            </a>
-            <a
-              href="https://github.com/aditya-gup780"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <div className="flex flex-row gap-2 hover:text-gray-400 transition">
-                <div className="font-mono text-md ">Aditya Gupta</div>
-                <FaGithub className="text-xl " />
-              </div>
-            </a>
+      <section className="flex flex-col mt-8 bg-black w-full justify-start items-center text-gray-100 h-40">
+        <div className="flex flex-row font-mono my-2 items-end mt-8"> Build with
+          <Image
+            src="/heart.png"
+            alt="heart"
+            width={25}
+            height={25}
+            className="mx-2"
+          />
+          by :
+        </div>
+        <div className="flex gap-50">
+
+          <div className="flex flex-col gap-0.5 justify-center items-center transition">
+            <div className="font-mono text-md ">Arpit Gami</div>
+            <div className="flex flex-row gap-3">
+
+              <a
+                href="https://github.com/arpitgami"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FaGithub className="text-lg hover:text-gray-400" />
+              </a>
+              <a
+                href="https://www.linkedin.com/in/arpit-gami-73ag/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FaLinkedin className="text-lg hover:text-gray-400" />
+              </a>
+            </div>
           </div>
-        </nav>
-      </footer>
-    </>
+          <div className="flex flex-col gap-0.5 justify-center items-center transition">
+            <div className="font-mono text-md ">Aditya Gupta</div>
+            <div className="flex flex-row gap-3">
+
+              <a
+                href="https://github.com/aditya-gup780"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FaGithub className="text-lg hover:text-gray-400" />
+              </a>
+              <a
+                href="https://www.linkedin.com/in/aditya-gup-780ad/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FaLinkedin className="text-lg hover:text-gray-400" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }
