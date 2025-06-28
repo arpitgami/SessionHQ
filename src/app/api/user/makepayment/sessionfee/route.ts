@@ -2,10 +2,10 @@ import connect from "@/dbconfig/dbconfig";
 import { ExpertApplication } from "@/models/experts";
 import { NextRequest, NextResponse } from "next/server";
 
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 export async function POST(req: NextRequest) {
   try {
+    const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
     const body = await req.json();
     const { expertID, userID, slot, requestID } = body;
     console.log("Body of session checkout : ", body);

@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic"; // no static optimization (for docker image)
+
 import connect from "@/dbconfig/dbconfig";
 import { ExpertApplication } from "@/models/experts";
 import { NextRequest, NextResponse } from "next/server";

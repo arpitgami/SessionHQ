@@ -5,16 +5,16 @@ import { Request } from "@/models/Request";
 import { error } from "console";
 import { Meeting } from "@/models/Meeting";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(req: NextRequest) {
-  const payload = await req.text();
-  const response = await JSON.parse(payload);
-
-  const sig = req.headers.get("stripe-signature");
-  // console.log("sig: ", sig);
 
   try {
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+    const payload = await req.text();
+    const response = await JSON.parse(payload);
+
+    const sig = req.headers.get("stripe-signature");
+    // console.log("sig: ", sig);
     let event = stripe.webhooks.constructEvent(
       payload,
       sig!,

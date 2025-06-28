@@ -4,13 +4,13 @@ import connect from "@/dbconfig/dbconfig";
 import { ExpertApplication } from "@/models/experts";
 
 export async function POST(req: Request) {
-  const { clerkID } = await req.json();
-
-  if (!clerkID) {
-    return NextResponse.json({ error: "Missing clerkID" }, { status: 400 });
-  }
 
   try {
+    const { clerkID } = await req.json();
+
+    if (!clerkID) {
+      return NextResponse.json({ error: "Missing clerkID" }, { status: 400 });
+    }
     await connect();
     const expert = await ExpertApplication.findOne({ clerkID });
 

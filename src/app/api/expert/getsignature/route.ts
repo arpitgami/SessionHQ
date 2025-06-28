@@ -1,4 +1,4 @@
-// /app/api/cloudinary-signature/route.ts
+
 import { v2 as cloudinary } from 'cloudinary';
 import { NextRequest, NextResponse } from 'next/server';
 

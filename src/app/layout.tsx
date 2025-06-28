@@ -5,7 +5,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { Navigation } from "@/component/Navbar";
 import "./globals.css";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 export default function RootLayout({
   children,
@@ -39,7 +39,9 @@ export default function RootLayout({
 
           <Toaster position="top-center" />
           {isMounted && !shouldHideNavbar && <Navigation />}
-          {children}
+          <Suspense fallback={<div>Loading...</div>}>
+            {children}
+          </Suspense>
         </body>
       </html>
     </ClerkProvider>

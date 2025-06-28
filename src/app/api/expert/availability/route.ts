@@ -6,10 +6,10 @@ import { Request } from "@/models/Request";
 import { initiateRefund } from "@/hooks/initiateRefund";
 
 export async function POST(req: NextRequest) {
-  const { userId, redirectToSignIn } = await auth();
-  if (!userId) return redirectToSignIn();
 
   try {
+    const { userId, redirectToSignIn } = await auth();
+    if (!userId) return redirectToSignIn();
     await connect();
     const expertId = userId;
     const { availability, lockedSlots } = await req.json();

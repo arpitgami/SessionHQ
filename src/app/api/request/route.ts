@@ -3,11 +3,15 @@ import { initiateRefund } from "@/hooks/initiateRefund";
 import { Request } from "@/models/Request";
 import { NextRequest, NextResponse } from "next/server";
 import { ExpertAvailability } from "@/models/ExpertAvailability";
-import { currentUser } from "@clerk/nextjs/server";
+// import { currentUser } from "@clerk/nextjs/server";
+
+
+
 export async function GET(req: NextRequest) {
   try {
     // console.log("getrequest route hit...");
     await connect();
+    const { currentUser } = await import("@clerk/nextjs/server");
     const user = await currentUser();
 
     if (!user) {
@@ -113,9 +117,8 @@ export async function GET(req: NextRequest) {
   }
 }
 export async function POST(req: NextRequest) {
-  await connect();
-
   try {
+    await connect();
     const { requestId, status } = await req.json();
 
     if (!requestId || !status) {
