@@ -23,6 +23,7 @@ export default function MeetingPage() {
         if (!user || !isLoaded) return;
 
         try {
+            //fetching upcoming meetings
             (async function getData() {
                 const res = await fetch(`/api/meeting/getmeeting?userId=${user!.id}`);
                 const data = await res.json();
@@ -31,7 +32,7 @@ export default function MeetingPage() {
 
             })()
         } catch (error) {
-            console.error("error fetchinf meetings", error);
+            console.error("error fetching meetings", error);
         }
 
     }, [user, isLoaded])

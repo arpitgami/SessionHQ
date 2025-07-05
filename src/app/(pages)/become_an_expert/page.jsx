@@ -65,7 +65,7 @@ export default function ExpertApplicationForm() {
       return;
     }
 
-    // ✅ If everything is valid
+    // If everything is valid
     console.log("Submitting:", formData);
 
     let imageURLToUse = formData.imageURL;

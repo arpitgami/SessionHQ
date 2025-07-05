@@ -7,8 +7,8 @@ export default function ExplorePage() {
   const [experts, setExperts] = useState([]);
   const [loading, setLoading] = useState(true);
   useUserGuard();
-
   useEffect(() => {
+    //fetching expert data
     const fetchExperts = async () => {
       try {
         const res = await fetch("/api/expert/expertdata");
