@@ -270,6 +270,7 @@ export default function RequestLifecycleSection() {
             { label: "Database", value: "MongoDB" },
             { label: "Payments & Media", value: "Stripe, Cloudinary" },
             { label: "Authentication & Email", value: "Clerk, Nodemailer" },
+            { label: "Infrastructure", value: "Amazon EC2, Docker, Nginx" },
           ].map(({ label, value }) => (
             <div
               key={label}
@@ -287,7 +288,9 @@ export default function RequestLifecycleSection() {
       </section>
 
       <section className="flex flex-col mt-8 bg-black w-full justify-start items-center text-gray-100 h-40">
-        <div className="flex flex-row font-mono my-2 items-end mt-8"> Build with
+        <div className="flex flex-row font-mono my-2 items-end mt-8">
+          {" "}
+          Build with
           <Image
             src="/heart.png"
             alt="heart"
@@ -298,11 +301,9 @@ export default function RequestLifecycleSection() {
           by :
         </div>
         <div className="flex gap-50">
-
           <div className="flex flex-col gap-0.5 justify-center items-center transition">
             <div className="font-mono text-md ">Arpit Gami</div>
             <div className="flex flex-row gap-3">
-
               <a
                 href="https://github.com/arpitgami"
                 target="_blank"
@@ -322,7 +323,6 @@ export default function RequestLifecycleSection() {
           <div className="flex flex-col gap-0.5 justify-center items-center transition">
             <div className="font-mono text-md ">Aditya Gupta</div>
             <div className="flex flex-row gap-3">
-
               <a
                 href="https://github.com/aditya-gup780"
                 target="_blank"
