@@ -66,14 +66,14 @@ export default function ExpertApplicationForm() {
     }
 
     // If everything is valid
-    console.log("Submitting:", formData);
+    // console.log("Submitting:", formData);
 
     let imageURLToUse = formData.imageURL;
     let publicIDToUse = formData.publicID;
 
     //uploading image to cloudinary
     if (!formData.imageURL) {
-      console.log("expert image before calling uplaodimage", expertImage);
+      // console.log("expert image before calling uplaodimage", expertImage);
       const { imageURL, public_id } = await uploadImage(
         expertImage,
         CLOUDINARY_API_KEY

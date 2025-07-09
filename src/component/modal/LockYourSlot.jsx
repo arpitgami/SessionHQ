@@ -53,7 +53,7 @@ const LockYourSlot = ({ selectedSlot, expert, prevStep, user, formData }) => {
         await saveuserSessionData();
         //stripe checkout
         try {
-            console.log("selected slot : ", selectedSlot);
+            // console.log("selected slot : ", selectedSlot);
             const res = await fetch("/api/user/makepayment/reservationfee", {
                 method: "POST",
                 body: JSON.stringify({
@@ -67,7 +67,7 @@ const LockYourSlot = ({ selectedSlot, expert, prevStep, user, formData }) => {
             })
 
             const data = await res.json();
-            console.log("session data:", data);
+            // console.log("session data:", data);
             if (!data.status) {
                 console.error("Error while getting session url:", data.error);
                 return;

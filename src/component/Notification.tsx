@@ -38,7 +38,7 @@ export default function NotificationDropdown() {
       const data = await res.json();
       if (data.status) {
         setRequests(data.data);
-        console.log(data);
+        // console.log(data);
       } else {
         console.log("Error fetching requests:", data.message);
       }

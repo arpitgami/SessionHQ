@@ -17,7 +17,9 @@ export default function MeetingPage() {
 
     const [meetings, setMeetings] = useState<Meeting[] | null>(null);
 
-
+  useEffect(()=>{
+    document.title="Meetings - SessionHQ";
+  },[])
     useEffect(() => {
 
         if (!user || !isLoaded) return;
@@ -28,7 +30,7 @@ export default function MeetingPage() {
                 const res = await fetch(`/api/meeting/getmeeting?userId=${user!.id}`);
                 const data = await res.json();
                 setMeetings(data.data);
-                console.log("meetings:", data);
+                // console.log("meetings:", data);
 
             })()
         } catch (error) {

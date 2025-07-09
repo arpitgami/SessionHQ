@@ -109,7 +109,21 @@ export default function ExpertRequests() {
       </h2>
 
       {loading ? (
-        <p className="text-center text-base-content/70">Loading requests...</p>
+          <div className="space-y-6">
+    {Array.from({ length: 3 }).map((_, i) => (
+      <div
+        key={i}
+        className="bg-base-200 animate-pulse p-6 rounded-xl shadow flex flex-col gap-4"
+      >
+        <div className="h-4 w-40 bg-base-300 rounded" /> {/* User name or title */}
+        <div className="h-4 w-28 bg-base-300 rounded" /> {/* Date or slot */}
+        <div className="flex gap-4 mt-2">
+          <div className="h-10 w-24 bg-base-300 rounded" /> {/* Accept button */}
+          <div className="h-10 w-24 bg-base-300 rounded" /> {/* Reject button */}
+        </div>
+      </div>
+    ))}
+  </div>
       ) : filteredRequests.length === 0 ? (
         <div className="text-center bg-base-200 rounded-xl p-8 shadow">
           <p className="text-lg font-semibold text-base-content">

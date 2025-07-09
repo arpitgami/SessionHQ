@@ -13,7 +13,7 @@ const useMediaStream = () => {
                 const mystream = await navigator.mediaDevices.getUserMedia({
                     audio: true, video: true
                 })
-                console.log("setting mystream...", mystream);
+                // console.log("setting mystream...", mystream);
                 setStream(mystream);
 
             } catch (error) {

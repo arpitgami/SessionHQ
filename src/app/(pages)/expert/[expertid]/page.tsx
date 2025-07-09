@@ -49,7 +49,7 @@ export default function ExpertProfile() {
           console.error("error fetching expert data:", data.error);
           return;
         }
-        console.log(data.data[0]);
+        // console.log(data.data[0]);
         setExpert(data.data[0]);
       } catch (error) {
         console.error("Error fetching experts:", error);

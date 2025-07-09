@@ -89,7 +89,7 @@ export default function ExpertMeetingCard({ meeting }: { meeting: Meeting }) {
         );
         const sessionData = await sessionRes.json();
         setUserSessionData(sessionData.userData);
-        console.log("user data :", data, sessionData);
+        // console.log("user data :", data, sessionData);
       } catch (error) {
         console.error("error fetching meeting data:", error);
       }

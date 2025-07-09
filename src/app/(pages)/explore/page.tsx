@@ -8,6 +8,7 @@ export default function ExplorePage() {
   const [loading, setLoading] = useState(true);
   useUserGuard();
   useEffect(() => {
+    document.title = "Explore - SessionHQ";
     //fetching expert data
     const fetchExperts = async () => {
       try {
@@ -39,9 +40,20 @@ export default function ExplorePage() {
       </div>
 
       {loading ? (
-        <p className="text-center text-base-content opacity-70">
-          Loading experts...
-        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <div
+              key={index}
+              className="bg-base-200 rounded-xl shadow p-4 flex flex-col gap-4"
+            >
+              <div className="skeleton w-full aspect-[4/3] rounded-lg"></div>
+              <div className="skeleton h-4 w-3/4"></div>
+              <div className="skeleton h-4 w-1/2"></div>
+              <div className="skeleton h-4 w-full"></div>
+              <div className="skeleton h-10 w-full rounded-md mt-2"></div>
+            </div>
+          ))}
+        </div>
       ) : experts.length === 0 ? (
         <p className="text-center text-base-content opacity-70">
           No experts available right now.

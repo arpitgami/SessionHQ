@@ -57,7 +57,7 @@ const page = () => {
                 const res = await fetch(`/api/meeting/allowuser?id=${roomid}`);
                 const data = await res.json();
 
-                console.log("meeting from room page:", data);
+                // console.log("meeting from room page:", data);
                 if (!data.status) {
                     alert(data.message);
                     router.push("/");
@@ -134,15 +134,15 @@ const page = () => {
 
         // User is in the room another user joins, I will initiate the call.
         socket.on("new-user-joined", (peerid) => {
-            console.log(`user joined the room , peerid is ${peerid}`);
+            // console.log(`user joined the room , peerid is ${peerid}`);
 
-            console.log("stream before calling", stream);
+            // console.log("stream before calling", stream);
             const call = peer.call(peerid, stream)
 
             setIsCall(call);
 
             call.on('stream', (incomingstream) => {
-                console.log("incoming Stream from ", peerid);
+                // console.log("incoming Stream from ", peerid);
 
                 setIncomingStream(incomingstream);
                 setIncomingID(peerid);
@@ -157,7 +157,7 @@ const page = () => {
             setIncomingID(null);
         })
         socket.on("user-sharing-screen-status", (status) => {
-            console.log("screen is shared by other user", status);
+            // console.log("screen is shared by other user", status);
             setIsOtherUserSharingScreen(status);
         })
         socket.on("meeting-ended", () => {
@@ -179,7 +179,7 @@ const page = () => {
 
             call.answer(stream); // sending my stream
             call.on('stream', (incomingstream) => {
-                console.log("incoming Stream from", callerid);
+                // console.log("incoming Stream from", callerid);
 
                 setIncomingStream(incomingstream);
                 setIncomingID(callerid);

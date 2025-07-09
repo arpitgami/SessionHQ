@@ -69,7 +69,7 @@ export default function MeetingCard({ meeting }: any) {
                 const res = await fetch(`/api/expert/expertdata?id=${meeting.expertID}`);
                 const data = await res.json();
                 setExpert(data.data[0]);
-                console.log("expert:", data.data[0]);
+                // console.log("expert:", data.data[0]);
 
             })()
         } catch (error) {
