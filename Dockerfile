@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Install dependencies
 COPY package.json package-lock.json* ./
-RUN npm ci
+RUN npm ci --prefer-offline --no-audit
 
 ARG CLERK_SECRET_KEY
 ARG STRIPE_SECRET_KEY
@@ -18,6 +18,7 @@ ARG NEXT_PUBLIC_APP_URL
 # Copy the rest of the app
 COPY . .
 
+ENV NODE_ENV=production
 # Use secrets temporarily during build
 RUN CLERK_SECRET_KEY=$CLERK_SECRET_KEY \
     STRIPE_SECRET_KEY=$STRIPE_SECRET_KEY \
@@ -29,10 +30,11 @@ RUN CLERK_SECRET_KEY=$CLERK_SECRET_KEY \
     npm run build
 
 # Stage 2: Run
-FROM node:18
+FROM node:18-alpine
 WORKDIR /app
 COPY --from=builder /app ./
-RUN npm install --omit=dev
+RUN npm install --omit=dev --prefer-offline --no-audit
 
+ENV NODE_ENV=production
 EXPOSE 3000
-CMD ["node", "--max-old-space-size=1024", "node_modules/.bin/next", "start"]
+CMD ["node", "--max-old-space-size=1024", "server.js"]
