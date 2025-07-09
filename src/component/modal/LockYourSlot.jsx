@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React,{useEffect} from "react";
 import { useSearchParams } from "next/navigation";
 import { loadStripe } from "@stripe/stripe-js";
 
@@ -13,7 +13,9 @@ const LockYourSlot = ({ selectedSlot, expert, prevStep, user, formData }) => {
     const time = selectedSlot.time;
 
     const expertName = expert.fullName;
-
+useEffect(()=>{
+    document.title="Expert Slot - SessionHQ";
+  },[]);
     // Format date
     const formattedDate = new Date(date).toLocaleDateString("en-US", {
         weekday: "long",

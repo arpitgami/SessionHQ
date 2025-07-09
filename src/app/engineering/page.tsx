@@ -2,9 +2,12 @@
 import Image from "next/image";
 import { FaGithub } from "react-icons/fa";
 import { FaLinkedin } from "react-icons/fa6";
-import React from "react";
+import React,{useEffect} from "react";
 
 export default function RequestLifecycleSection() {
+   useEffect(()=>{
+    document.title="Engineering Page - SessionHQ";
+  },[])
   return (
     <div>
       <section className="bg-base-200 py-20 px-6 sm:px-10 md:px-24">

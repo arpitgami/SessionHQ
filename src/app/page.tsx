@@ -13,6 +13,8 @@ export default function Home() {
   const searchParams = useSearchParams();
   const hasShownToast = useRef(false); //toprevent duplicate
   useEffect(() => {
+    document.title = "SessionHQ";},[]);
+  useEffect(() => {
     const status = searchParams.get("status");
     const toastType = searchParams.get("toast");
     if (hasShownToast.current) return;

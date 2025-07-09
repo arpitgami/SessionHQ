@@ -23,7 +23,9 @@ export default function ExpertRequests() {
   const router = useRouter();
   const [requests, setRequests] = useState<RequestType[]>([]);
   const [loading, setLoading] = useState(true);
-
+ useEffect(()=>{
+    document.title="Requests - SessionHQ";
+  },[]);
   useEffect(() => {
     const checkExpertStatus = async () => {
       const res = await fetch("/api/expert/expert-status", {

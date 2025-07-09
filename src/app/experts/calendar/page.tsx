@@ -59,7 +59,9 @@ export default function ExpertAvailabilityCalendar() {
       alert("Failed to save availability");
     }
   };
-
+ useEffect(()=>{
+    document.title="Calendar - SessionHQ";
+  },[])
   useEffect(() => {
     const fetchAvailability = async () => {
       try {

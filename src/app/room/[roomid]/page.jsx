@@ -48,7 +48,9 @@ const page = () => {
 
         router.push("/feedback");
     }
-
+useEffect(()=>{
+    document.title="Meeting Room - SessionHQ";
+  },[]);
     //check if user is allowed in the room
     useEffect(() => {
         if (!roomid) return;

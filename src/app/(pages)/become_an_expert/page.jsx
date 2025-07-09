@@ -25,7 +25,8 @@ export default function ExpertApplicationForm() {
   // useEffect(() => {
   //     console.log(process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY)
   // }, []);
-
+useEffect(() => {
+    document.title = "Become An Expert - SessionHQ";},[])
   const updateField = (key, value) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
   };

@@ -39,7 +39,14 @@ export default function MeetingPage() {
 
     }, [user, isLoaded])
 
-    if (!isLoaded) return <div className="flex flex-col h-screen w-screen items-center justify-center">Loading....</div>
+    if (!isLoaded) return ( <div className="flex flex-col h-screen w-screen items-center justify-center bg-base-100">
+      <div className="w-[80%] max-w-4xl flex flex-col gap-6">
+        <div className="skeleton h-10 w-1/2 mx-auto"></div>
+        {Array.from({ length: 3 }).map((_, idx) => (
+          <div key={idx} className="skeleton h-28 w-full rounded-xl"></div>
+        ))}
+      </div>
+    </div>);
 
     return (
 

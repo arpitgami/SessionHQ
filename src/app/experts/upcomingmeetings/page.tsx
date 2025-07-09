@@ -16,7 +16,9 @@ export default function UpcomingSession() {
 
     const [meetings, setMeetings] = useState<Meeting[] | null>(null);
 
-
+useEffect(()=>{
+    document.title="Meetings - SessionHQ";
+  },[]);
     useEffect(() => {
 
         if (!user || !isLoaded) return;

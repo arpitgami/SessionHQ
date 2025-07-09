@@ -12,7 +12,9 @@ const Page = () => {
     const updateField = (key, value) => {
         setFormData(prev => ({ ...prev, [key]: value }));
     };
-
+useEffect(()=>{
+    document.title="Userform - SessionHQ";
+  },[]);
     // Attach clerkID once user is loaded
     useEffect(() => {
         if (isLoaded && user?.id) {
