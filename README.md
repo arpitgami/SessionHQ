@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SessionHQ
 
-## Getting Started
+**High-signal 1:1 sessions for early-stage founders.**  
+SessionHQ is a curated platform that connects startup founders with seasoned operators for meaningful, 1:1 sessions. Our goal is to make expert advice accessible through frictionless scheduling, real-time communication, and seamless infrastructure.
 
-First, run the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Why Use SessionHQ
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Let us give you two solid reasons to consider our platform:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Our onboarding process ensures that experts don’t get spammed with irrelevant requests. Only serious founders reach out, which keeps interactions focused and meaningful.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. Because our experts are protected from spam and appreciate the quality of engagement, we’re able to attract the very best in the industry. As a user, this means you can connect with top-tier operators and get real help with your startup challenges.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+![Next.js](https://img.shields.io/badge/Next.js-black?logo=next.js&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-blue?logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?logo=tailwindcss&logoColor=white)
+![Socket.IO](https://img.shields.io/badge/Socket.IO-black?logo=socket.io&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?logo=mongodb&logoColor=white)
+![Clerk](https://img.shields.io/badge/Clerk-white?logo=clerk&logoColor=black)
+![Stripe](https://img.shields.io/badge/Stripe-635BFF?logo=stripe&logoColor=white)
+![Cloudinary](https://img.shields.io/badge/Cloudinary-3448C5?logo=cloudinary&logoColor=white)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Features & Tech Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Built with Next.js in TypeScript  
+- TailwindCSS and DaisyUI for styling  
+- MongoDB for data storage  
+- Authentication handled via Clerk  
+- Real-time communication using WebRTC, PeerJS, and Socket.IO  
+- Stripe integration for seamless payments  
+- Cloudinary for media uploads  
+- Email notifications powered by Nodemailer  
+- Session scheduling and timezone handling  
+- Structured onboarding and dashboard for both founders and experts
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Know More
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Know the engineering behind this project: [https://www.sessionhq.in/engineering](https://www.sessionhq.in/engineering)  
+- Watch the demo video: [Demo Video](https://youtu.be/MkAJSVPy_WM)
