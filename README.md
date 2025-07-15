@@ -25,7 +25,7 @@ Let us give you two solid reasons to consider our platform:
 ![Cloudinary](https://img.shields.io/badge/Cloudinary-3448C5?logo=cloudinary&logoColor=white)
 ![Docker](https://img.shields.io/badge/docker-257bd6?style=flat&logo=docker&logoColor=white)
 ![NGINX](https://img.shields.io/badge/-NGINX-009639?style=flat&logo=nginx&logoColor=white)
-![AWS EC2](https://img.shields.io/badge/AWS-EC2-orange?logo=amazon-aws&logoColor=white)
+![AWS EC2](https://img.shields.io/badge/AWS-EC2-purple?logo=amazon-aws&logoColor=white)
 
 ## Features & Tech Stack
 
