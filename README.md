@@ -21,7 +21,11 @@ Let us give you two solid reasons to consider our platform:
 ![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?logo=mongodb&logoColor=white)
 ![Clerk](https://img.shields.io/badge/Clerk-white?logo=clerk&logoColor=black)
 ![Stripe](https://img.shields.io/badge/Stripe-635BFF?logo=stripe&logoColor=white)
+![WebRTC](https://img.shields.io/badge/WebRTC-blue)
 ![Cloudinary](https://img.shields.io/badge/Cloudinary-3448C5?logo=cloudinary&logoColor=white)
+![Docker](https://img.shields.io/badge/docker-257bd6?style=flat&logo=docker&logoColor=white)
+![NGINX](https://img.shields.io/badge/-NGINX-009639?style=flat&logo=nginx&logoColor=white)
+![AWS EC2](https://img.shields.io/badge/AWS-EC2-orange?logo=amazon-aws&logoColor=white)
 
 ## Features & Tech Stack
 
@@ -35,6 +39,9 @@ Let us give you two solid reasons to consider our platform:
 - Email notifications powered by Nodemailer  
 - Session scheduling and timezone handling  
 - Structured onboarding and dashboard for both founders and experts
+- Deployed using Docker containers
+- Served through Nginx reverse proxy
+- Hosted on Amazon EC2 (t2.micro)
 
 ---
 
